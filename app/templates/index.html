@@ -1,0 +1,332 @@
+{% extends "base.html" %}
+
+{% block title %}Stock Analyzer{% endblock %}
+
+{% block content %}
+  <!-- Quality Snapshot -->
+  <section class="section-quality" id="section-quality" style="display:none;">
+    <h2 class="section-title">BUSINESS QUALITY</h2>
+    <div class="quality-grid">
+      <div class="quality-card">
+        <div class="quality-metric-heading">
+          <span class="quality-metric-name">ROIC</span>
+          <span class="quality-metric-info" role="img" aria-label="Explanation"><span class="quality-metric-info-icon">i</span></span>
+          <span class="quality-tooltip"><span class="quality-tooltip-desc">Return on invested capital.</span><span class="quality-tooltip-formula">Net Income ÷ (Equity + Liability − Cash − Short-term investments).</span></span>
+        </div>
+        <div class="quality-metric-value" id="quality-roic-value">—</div>
+        <div class="quality-metric-period" id="quality-roic-period"></div>
+        <div class="quality-metric-median" id="quality-roic-median">10Y med: —</div>
+        <div class="quality-sparkline" id="quality-roic-sparkline">▁▂▃▅▆▆▇</div>
+      </div>
+      <div class="quality-card">
+        <div class="quality-metric-heading">
+          <span class="quality-metric-name">ROE</span>
+          <span class="quality-metric-info" role="img" aria-label="Explanation"><span class="quality-metric-info-icon">i</span></span>
+          <span class="quality-tooltip"><span class="quality-tooltip-desc">Return on equity.</span><span class="quality-tooltip-formula">Net Income ÷ Equity.</span></span>
+        </div>
+        <div class="quality-metric-value" id="quality-roe-value">—</div>
+        <div class="quality-metric-period" id="quality-roe-period"></div>
+        <div class="quality-metric-median" id="quality-roe-median">10Y med: —</div>
+        <div class="quality-sparkline" id="quality-roe-sparkline">▁▂▃▆▆▇▇</div>
+      </div>
+      <div class="quality-card">
+        <div class="quality-metric-heading">
+          <span class="quality-metric-name">Net Margin</span>
+          <span class="quality-metric-info" role="img" aria-label="Explanation"><span class="quality-metric-info-icon">i</span></span>
+          <span class="quality-tooltip"><span class="quality-tooltip-desc">Net profit margin.</span><span class="quality-tooltip-formula">Net Income ÷ Revenue.</span></span>
+        </div>
+        <div class="quality-metric-value" id="quality-npm-value">—</div>
+        <div class="quality-metric-period" id="quality-npm-period"></div>
+        <div class="quality-metric-median" id="quality-npm-median">10Y med: —</div>
+        <div class="quality-sparkline" id="quality-npm-sparkline">▁▃▅▆▆▇▇</div>
+      </div>
+      <div class="quality-card">
+        <div class="quality-metric-heading">
+          <span class="quality-metric-name">D/E (Debt/Equity)</span>
+          <span class="quality-metric-info" role="img" aria-label="Explanation"><span class="quality-metric-info-icon">i</span></span>
+          <span class="quality-tooltip"><span class="quality-tooltip-desc">Debt-to-equity (interest-bearing debt only).</span><span class="quality-tooltip-formula">(Short-term + Long-term borrowings) ÷ Equity.</span></span>
+        </div>
+        <div class="quality-metric-value" id="quality-de-value">—</div>
+        <div class="quality-metric-period" id="quality-de-period"></div>
+        <div class="quality-metric-median" id="quality-de-median">10Y med: —</div>
+        <div class="quality-sparkline" id="quality-de-sparkline">▁▂▂▃▃▂▁</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Growth Trends -->
+  <section class="section-growth" id="section-growth" style="display:none;">
+    <h2 class="section-title">GROWTH</h2>
+    <div class="growth-container">
+      <div class="growth-metrics">
+        <div class="growth-metric-group">
+          <div class="growth-metric-label">Revenue Growth</div>
+          <div class="growth-metric-row growth-metric-row-header">
+            <span class="growth-col-name"></span>
+            <span class="growth-col-5y">5Y</span>
+            <span class="growth-col-10y">10Y</span>
+          </div>
+          <div class="growth-metric-row growth-metric-primary">
+            <span class="growth-col-name">Median YoY:</span>
+            <span class="growth-col-5y growth-value" id="growth-revenue-median-yoy-5y">—</span>
+            <span class="growth-col-10y growth-value" id="growth-revenue-median-yoy-10y">—</span>
+          </div>
+          <div class="growth-metric-row growth-metric-quality">
+            <span class="growth-col-name growth-label-with-info">
+              Growth Quality:
+              <span class="quality-metric-info" role="img" aria-label="Explanation"><span class="quality-metric-info-icon">i</span></span>
+              <span class="growth-tooltip"><span class="quality-tooltip-desc">Score 0–100 from growth ratio, stability, direction, resilience.</span><span class="quality-tooltip-formula">Click the dots to see the point breakdown.</span></span>
+            </span>
+            <span class="growth-col-5y growth-quality-dots-wrap growth-quality-clickable" id="growth-revenue-quality-5y" role="button" tabindex="0">—</span>
+            <span class="growth-col-10y growth-quality-dots-wrap growth-quality-clickable" id="growth-revenue-quality-10y" role="button" tabindex="0">—</span>
+          </div>
+          <div class="growth-metric-row growth-metric-secondary">
+            <span class="growth-col-name">CAGR:</span>
+            <span class="growth-col-5y growth-value growth-value-muted" id="growth-revenue-cagr-5y">—</span>
+            <span class="growth-col-10y growth-value growth-value-muted" id="growth-revenue-cagr-10y">—</span>
+          </div>
+        </div>
+        <div class="growth-metric-group">
+          <div class="growth-metric-label">Net Income Growth</div>
+          <div class="growth-metric-row growth-metric-row-header">
+            <span class="growth-col-name"></span>
+            <span class="growth-col-5y">5Y</span>
+            <span class="growth-col-10y">10Y</span>
+          </div>
+          <div class="growth-metric-row growth-metric-primary">
+            <span class="growth-col-name">Median YoY:</span>
+            <span class="growth-col-5y growth-value" id="growth-income-median-yoy-5y">—</span>
+            <span class="growth-col-10y growth-value" id="growth-income-median-yoy-10y">—</span>
+          </div>
+          <div class="growth-metric-row growth-metric-quality">
+            <span class="growth-col-name growth-label-with-info">
+              Growth Quality:
+              <span class="quality-metric-info" role="img" aria-label="Explanation"><span class="quality-metric-info-icon">i</span></span>
+              <span class="growth-tooltip"><span class="quality-tooltip-desc">Score 0–100 from growth ratio, stability, direction, resilience.</span><span class="quality-tooltip-formula">Click the dots to see the point breakdown.</span></span>
+            </span>
+            <span class="growth-col-5y growth-quality-dots-wrap growth-quality-clickable" id="growth-income-quality-5y" role="button" tabindex="0">—</span>
+            <span class="growth-col-10y growth-quality-dots-wrap growth-quality-clickable" id="growth-income-quality-10y" role="button" tabindex="0">—</span>
+          </div>
+          <div class="growth-metric-row growth-metric-secondary">
+            <span class="growth-col-name">CAGR:</span>
+            <span class="growth-col-5y growth-value growth-value-muted" id="growth-income-cagr-5y">—</span>
+            <span class="growth-col-10y growth-value growth-value-muted" id="growth-income-cagr-10y">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="growth-chart-container">
+        <div class="growth-chart-header">
+          <span class="growth-chart-title">Revenue / Net Income Trend</span>
+          <div class="growth-chart-toggles">
+            <label><input type="checkbox" id="toggle-revenue" checked /> <span class="chart-series-label chart-series-revenue">Revenue</span></label>
+            <label><input type="checkbox" id="toggle-net-income" checked /> <span class="chart-series-label chart-series-net-income">Net Income</span></label>
+            <label><input type="checkbox" id="toggle-net-income-normalized" /> <span class="chart-series-label chart-series-normalized">Net Income (normalized)</span></label>
+            <label><input type="checkbox" id="toggle-net-income-conservative" /> <span class="chart-series-label chart-series-conservative">Net Income (conservative)</span></label>
+          </div>
+        </div>
+        <div id="growth-chart" class="growth-chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Growth Quality Modal -->
+  <div id="growth-quality-modal" class="growth-quality-modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="growth-quality-modal-backdrop"></div>
+    <div class="growth-quality-modal-content">
+      <div class="growth-quality-modal-header">
+        <h3 id="modal-title" class="growth-quality-modal-title">Growth Quality — Revenue</h3>
+        <button type="button" class="growth-quality-modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="growth-quality-modal-body">
+        <div class="growth-quality-score-summary">
+          <span class="growth-quality-score-label">Total Score:</span>
+          <span id="modal-total-score" class="growth-quality-score-value">—</span>
+        </div>
+        <div id="modal-breakdown" class="growth-quality-breakdown">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Peer Analysis Modal -->
+  <div id="peer-analysis-modal" class="peer-analysis-modal" role="dialog" aria-labelledby="peer-analysis-modal-title" aria-hidden="true">
+    <div class="peer-analysis-modal-backdrop"></div>
+    <div class="peer-analysis-modal-content">
+      <div class="peer-analysis-modal-header">
+        <div class="peer-analysis-modal-header-main">
+          <div class="peer-analysis-modal-header-row peer-analysis-header-title-row">
+            <h3 id="peer-analysis-modal-title" class="peer-analysis-modal-title">Peer analysis</h3>
+            <div class="peer-analysis-valuation-inline">
+              <button type="button" class="peer-analysis-valuation-btn" id="peer-valuation-fetch-btn">Get valuation</button>
+              <div id="peer-valuation-fetch-choice" class="peer-valuation-fetch-choice" style="display:none;" role="dialog" aria-label="Choose fetch scope">
+                <span class="peer-valuation-fetch-choice-label">Fetch for:</span>
+                <button type="button" class="peer-valuation-fetch-choice-btn" id="peer-valuation-fetch-all-btn">All (ICB + Broader)</button>
+                <button type="button" class="peer-valuation-fetch-choice-btn" id="peer-valuation-fetch-view-btn">Current view only</button>
+              </div>
+            </div>
+          </div>
+          <div class="peer-analysis-modal-header-row">
+            <div class="peer-analysis-toolbar peer-analysis-view-toolbar">
+              <span class="peer-analysis-toolbar-label">View:</span>
+              <button type="button" class="peer-analysis-mode-btn active" data-mode="all" aria-pressed="true">All</button>
+              <button type="button" class="peer-analysis-mode-btn" data-mode="icb" aria-pressed="false">ICB</button>
+              <button type="button" class="peer-analysis-mode-btn" data-mode="broad" aria-pressed="false">Broad sector</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="peer-analysis-modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="peer-analysis-modal-body">
+        <div id="peer-analysis-post-fetch" class="peer-analysis-post-fetch" style="display:none;">
+          <div class="peer-analysis-post-fetch-row-1">
+            <div class="peer-analysis-toolbar peer-analysis-valuation-toolbar">
+              <span class="peer-analysis-toolbar-label">Metric:</span>
+              <button type="button" class="peer-analysis-metric-btn active" data-metric="pe" aria-pressed="true">P/E</button>
+              <button type="button" class="peer-analysis-metric-btn" data-metric="pb" aria-pressed="false">P/B</button>
+              <button type="button" class="peer-analysis-metric-btn" data-metric="ev" aria-pressed="false">EV/EBITDA</button>
+            </div>
+            <span class="peer-val-peers-have-data-wrap">
+              <span class="peer-val-peers-wrap">
+                <span class="peer-analysis-toolbar-label">Peers:</span>
+                <button type="button" class="peer-val-scope-btn" data-scope="around" aria-pressed="false">Around target</button>
+                <button type="button" class="peer-val-scope-btn" data-scope="top5" aria-pressed="false">Top 5 by cap</button>
+                <button type="button" class="peer-val-scope-btn active" data-scope="both" aria-pressed="true">Both</button>
+              </span>
+              <button type="button" class="peer-val-have-data-btn active" id="peer-val-have-data-btn" aria-pressed="true">Have data only</button>
+            </span>
+          </div>
+          <div class="peer-val-legend peer-val-legend-row-1">
+            <span class="peer-val-legend-item"><span class="peer-val-legend-swatch peer-val-legend-track"></span> Full scale</span>
+            <span class="peer-val-legend-item"><span class="peer-val-legend-swatch peer-val-legend-range"></span> Ticker 52w range</span>
+            <span class="peer-val-legend-item"><span class="peer-val-legend-swatch peer-val-legend-fill"></span> Low → current</span>
+            <span class="peer-val-legend-item"><span class="peer-val-legend-swatch peer-val-legend-ticker"></span> Current</span>
+            <span class="peer-val-legend-item"><span class="peer-val-legend-swatch peer-val-legend-avg"></span> Sector median</span>
+          </div>
+          <div class="peer-val-legend peer-val-legend-row-2">
+            <span class="peer-val-legend-item"><span class="peer-val-legend-swatch peer-val-legend-ours"></span> Target company</span>
+            <span class="peer-val-legend-item"><span class="peer-val-legend-swatch peer-val-legend-icb"></span> Same ICB</span>
+          </div>
+          <div id="peer-val-scale-wrap" class="peer-val-title-scale-row">
+            <h4 class="peer-analysis-col-title peer-analysis-col-title-inline" id="peer-analysis-col-title">Peers</h4>
+            <span class="peer-val-sort">
+              <span class="peer-analysis-toolbar-label">Sort by:</span>
+              <button type="button" class="peer-val-sort-btn active" data-sort="valuation" aria-pressed="true">By valuation</button>
+              <button type="button" class="peer-val-sort-btn" data-sort="marketcap" aria-pressed="false">By market cap</button>
+            </span>
+            <span class="peer-val-scale">Scale: <span id="peer-val-scale-min">—</span> – <span id="peer-val-scale-max">—</span> · Sector median: <span id="peer-val-scale-avg">—</span></span>
+          </div>
+        </div>
+        <div class="peer-analysis-columns peer-analysis-columns--single">
+          <div class="peer-analysis-col">
+            <h4 class="peer-analysis-col-title-simple" id="peer-analysis-col-title-simple">Peers</h4>
+            <div id="peer-analysis-col-adjacent" class="peer-analysis-list"><!-- filled by JS --></div>
+          </div>
+          <div class="peer-analysis-col" style="display:none;">
+            <div id="peer-analysis-col-top5" class="peer-analysis-list"></div>
+          </div>
+        </div>
+        <div class="peer-analysis-valuation-results" id="peer-analysis-valuation-results">
+          <p class="peer-analysis-empty" id="peer-valuation-results-placeholder">Click &quot;Get valuation&quot; to fetch 52w P/E, P/B &amp; EV/EBITDA for ICB and Broader peers.</p>
+          <div id="peer-valuation-results-table-wrap" class="peer-valuation-table-wrap" style="display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Valuation -->
+  <section class="section-valuation" id="section-valuation" style="display:none;">
+    <h2 class="section-title">VALUATION</h2>
+    <div class="valuation-trend-controls" id="valuation-trend-controls" style="display:none;">
+      <span class="valuation-trend-mode-label">Trend:</span>
+      <button type="button" class="valuation-trend-mode-btn active" data-mode="annual">By year</button>
+      <button type="button" class="valuation-trend-mode-btn" data-mode="quarterly">By quarter</button>
+    </div>
+    <div class="valuation-grid">
+      <div class="valuation-card">
+        <div class="valuation-metric-name">P/E</div>
+        <div class="valuation-metric-value" id="valuation-pe-value">—</div>
+        <div class="valuation-range" id="valuation-pe-range">5Y range: —</div>
+        <div class="valuation-industry" id="valuation-pe-industry">Industry: —</div>
+        <div class="valuation-trend-label">Quarterly trend (High / Low / Avg)</div>
+        <div class="valuation-trend" id="valuation-pe-trend"></div>
+        <div class="valuation-bar">
+          <div class="valuation-bar-track">
+            <div class="valuation-bar-fill" id="valuation-pe-bar" style="left: 50%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="valuation-card">
+        <div class="valuation-metric-name">P/B</div>
+        <div class="valuation-metric-value" id="valuation-pb-value">—</div>
+        <div class="valuation-range" id="valuation-pb-range">5Y range: —</div>
+        <div class="valuation-industry" id="valuation-pb-industry">Industry: —</div>
+        <div class="valuation-trend-label">Quarterly trend (High / Low / Avg)</div>
+        <div class="valuation-trend" id="valuation-pb-trend"></div>
+        <div class="valuation-bar">
+          <div class="valuation-bar-track">
+            <div class="valuation-bar-fill" id="valuation-pb-bar" style="left: 50%;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="valuation-card">
+        <div class="valuation-metric-name">EV / EBITDA</div>
+        <div class="valuation-metric-value" id="valuation-ev-value">—</div>
+        <div class="valuation-range" id="valuation-ev-range">5Y range: —</div>
+        <div class="valuation-industry" id="valuation-ev-industry">Industry: —</div>
+        <div class="valuation-trend-label">Quarterly trend (High / Low / Avg)</div>
+        <div class="valuation-trend" id="valuation-ev-trend"></div>
+        <div class="valuation-bar">
+          <div class="valuation-bar-track">
+            <div class="valuation-bar-fill" id="valuation-ev-bar" style="left: 50%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Dive Tabs -->
+  <section class="section-tabs" id="section-tabs" style="display:none;">
+    <div class="tabs-header">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="financials">Financials</button>
+      <button class="tab-btn" data-tab="peers">Peers</button>
+      <button class="tab-btn" data-tab="adjustments">Adjustments</button>
+      <button class="tab-btn" data-tab="notes">Notes</button>
+    </div>
+    <div class="tabs-content">
+      <div class="tab-pane active" id="tab-overview">
+        <p class="placeholder">Detailed overview coming soon...</p>
+        <a id="downloadLink" href="#" class="download-link" style="display:none;">Download CSV</a>
+      </div>
+      <div class="tab-pane" id="tab-financials">
+        <div id="financials-content" class="financials-content">
+          <div id="financials-balance-sheet" class="financials-statement-section"></div>
+          <div id="financials-income-statement" class="financials-statement-section"></div>
+          <div id="financials-cashflow" class="financials-statement-section"></div>
+        </div>
+        <p id="financials-placeholder" class="placeholder">Financial statements coming soon...</p>
+      </div>
+      <div class="tab-pane" id="tab-peers">
+        <p class="placeholder">Peer comparison coming soon...</p>
+      </div>
+      <div class="tab-pane" id="tab-adjustments">
+        <p class="placeholder">Adjustments coming soon...</p>
+      </div>
+      <div class="tab-pane" id="tab-notes">
+        <p class="placeholder">Notes coming soon...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Empty state -->
+  <section class="empty-state" id="empty-state">
+    <div class="empty-state-content">
+      <div class="empty-state-icon">📊</div>
+      <h2>Welcome to Stock Analyzer</h2>
+      <p>Enter a VNINDEX symbol above to analyze financial data</p>
+      <p class="empty-state-hint">Try: GVT, FRT, VNM</p>
+    </div>
+  </section>
+{% endblock %}
+

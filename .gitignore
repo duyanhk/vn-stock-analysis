@@ -1,0 +1,32 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Output & data
+output/
+*.csv
+
+# Environment
+.env
+.env.local
+
+# Reference materials (external repos, notebooks)
+Reference/
+
+# IDE & OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,14 @@
+Flask
+gunicorn
+selenium
+webdriver-manager
+beautifulsoup4
+pandas
+numpy
+
+# Market data (VNStock)
+vnstock>=2.0
+tenacity>=8.0.0
+pydantic>=2.0.0
+pytz
+

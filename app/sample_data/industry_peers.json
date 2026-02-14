@@ -1,0 +1,761 @@
+{
+  "updated": "2026-02-11T16:19:38.021203+00:00",
+  "industries": {
+    "18": {
+      "industry_code": 18,
+      "industry_name": "SX Nhựa - Hóa chất",
+      "updated": "2026-02-11T16:19:38.021203+00:00",
+      "companies": [
+        {
+          "symbol": "GVR",
+          "company_name": "Tập đoàn Công nghiệp Cao su Việt Nam - CTCP",
+          "market_cap": 156000000000000.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "DGC",
+          "company_name": "CTCP Tập đoàn Hóa chất Đức Giang",
+          "market_cap": 26014821290500.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "DCM",
+          "company_name": "CTCP - Tổng công ty Phân bón Dầu khí Cà Mau",
+          "market_cap": 20911300000000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "DPM",
+          "company_name": "Tổng Công ty Phân bón và Hóa chất Dầu khí - CTCP",
+          "market_cap": 17168106780250.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "BMP",
+          "company_name": "CTCP Nhựa Bình Minh",
+          "market_cap": 12729375859000.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "NTP",
+          "company_name": "CTCP Nhựa Thiếu niên Tiền Phong",
+          "market_cap": 10724096394000.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "PHR",
+          "company_name": "CTCP Cao su Phước Hòa",
+          "market_cap": 7967352842400.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "DPR",
+          "company_name": "CTCP Cao su Đồng Phú",
+          "market_cap": 3431994314000.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "CSV",
+          "company_name": "CTCP Hóa chất Cơ bản Miền Nam",
+          "market_cap": 3193447399000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "BFC",
+          "company_name": "CTCP Phân bón Bình Điền",
+          "market_cap": 3098505220600.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "AAA",
+          "company_name": "CTCP Nhựa An Phát Xanh",
+          "market_cap": 3059381012100.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "TDP",
+          "company_name": "CTCP Thuận Đức",
+          "market_cap": 2933389812500.0,
+          "sector_industry": "Industrial Goods & Services · Containers & Packaging"
+        },
+        {
+          "symbol": "DNP",
+          "company_name": "CTCP DNP Holding",
+          "market_cap": 2720644494800.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "LIX",
+          "company_name": "CTCP Bột Giặt Lix",
+          "market_cap": 2455920000000.0,
+          "sector_industry": "Personal & Household Goods · Personal Products"
+        },
+        {
+          "symbol": "TRC",
+          "company_name": "CTCP Cao su Tây Ninh",
+          "market_cap": 2220000000000.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "LAS",
+          "company_name": "CTCP Supe Phốt phát và Hóa chất Lâm Thao",
+          "market_cap": 1907273160000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "NET",
+          "company_name": "CTCP Bột giặt NET",
+          "market_cap": 1534288619000.0,
+          "sector_industry": "Personal & Household Goods · Personal Products"
+        },
+        {
+          "symbol": "VTZ",
+          "company_name": "CTCP Sản xuất và Thương mại Nhựa Việt Thành",
+          "market_cap": 1530812643300.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "APH",
+          "company_name": "CTCP Tập đoàn An Phát Holdings",
+          "market_cap": 1487694034800.0,
+          "sector_industry": "Industrial Goods & Services · Containers & Packaging"
+        },
+        {
+          "symbol": "NFC",
+          "company_name": "CTCP Phân lân Ninh Bình",
+          "market_cap": 959606860000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "HRC",
+          "company_name": "CTCP Cao su Hòa Bình",
+          "market_cap": 859378395900.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "HVT",
+          "company_name": "CTCP Hóa chất Việt Trì",
+          "market_cap": 760920274200.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "VAF",
+          "company_name": "CTCP Phân lân Nung chảy Văn Điển",
+          "market_cap": 753306960000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "TPP",
+          "company_name": "CTCP Tân Phú Việt Nam",
+          "market_cap": 710614986600.0,
+          "sector_industry": "Industrial Goods & Services · Containers & Packaging"
+        },
+        {
+          "symbol": "ADP",
+          "company_name": "CTCP Sơn Á Đông",
+          "market_cap": 542588467500.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "PCH",
+          "company_name": "CTCP Nhựa Picomat",
+          "market_cap": 508197860000.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "PLP",
+          "company_name": "CTCP Sản xuất và Công nghệ Nhựa Pha Lê",
+          "market_cap": 485100000000.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "SFG",
+          "company_name": "CTCP Phân Bón Miền Nam",
+          "market_cap": 478973330000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "HII",
+          "company_name": "CTCP An Tiến Industries",
+          "market_cap": 380101162560.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "HCD",
+          "company_name": "CTCP Đầu tư Sản xuất và Thương mại HCD",
+          "market_cap": 284582883200.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "ABS",
+          "company_name": "CTCP Dịch vụ Nông nghiệp Bình Thuận",
+          "market_cap": 223200000000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "VPS",
+          "company_name": "CTCP Thuốc sát trùng Việt Nam",
+          "market_cap": 219168696320.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "PCE",
+          "company_name": "CTCP Phân bón và Hóa chất Dầu khí Miền Trung",
+          "market_cap": 192000000000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "HDA",
+          "company_name": "CTCP Hãng sơn Đông Á",
+          "market_cap": 173879792100.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "PSW",
+          "company_name": "CTCP Phân bón và Hóa chất Dầu khí Tây Nam Bộ",
+          "market_cap": 130900000000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "PMB",
+          "company_name": "CTCP Phân bón và Hóa chất Dầu khí Miền Bắc",
+          "market_cap": 122400000000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "BBS",
+          "company_name": "CTCP VICEM Bao bì Bút Sơn",
+          "market_cap": 74400000000.0,
+          "sector_industry": "Industrial Goods & Services · Containers & Packaging"
+        },
+        {
+          "symbol": "CPC",
+          "company_name": "CTCP Thuốc sát trùng Cần Thơ",
+          "market_cap": 71425375000.0,
+          "sector_industry": "Chemicals · Specialty Chemicals"
+        },
+        {
+          "symbol": "ALT",
+          "company_name": "CTCP Văn hóa Tân Bình",
+          "market_cap": 69414178900.0,
+          "sector_industry": "Media · Publishing"
+        },
+        {
+          "symbol": "PGN",
+          "company_name": "CTCP Phụ Gia Nhựa",
+          "market_cap": 55842668100.0,
+          "sector_industry": "Chemicals · Commodity Chemicals"
+        },
+        {
+          "symbol": "BPC",
+          "company_name": "CTCP VICEM Bao bì Bỉm Sơn",
+          "market_cap": 52440000000.0,
+          "sector_industry": "Industrial Goods & Services · Containers & Packaging"
+        },
+        {
+          "symbol": "BXH",
+          "company_name": "CTCP VICEM Bao bì Hải Phòng",
+          "market_cap": 36746888000.0,
+          "sector_industry": "Industrial Goods & Services · Containers & Packaging"
+        }
+      ],
+      "pending_symbols": []
+    },
+    "21": {
+      "industry_code": 21,
+      "industry_name": "Vật liệu xây dựng",
+      "updated": "2026-02-11T11:15:01.311688+00:00",
+      "companies": [
+        {
+          "symbol": "HPG",
+          "company_name": "CTCP Tập đoàn Hòa Phát",
+          "market_cap": 206086258206750.0,
+          "sector_industry": "Basic Resources · Steel"
+        },
+        {
+          "symbol": "VGC",
+          "company_name": "Tổng Công ty Viglacera - CTCP",
+          "market_cap": 23762550000000.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "HSG",
+          "company_name": "CTCP Tập đoàn Hoa Sen",
+          "market_cap": 9687324020400.0,
+          "sector_industry": "Basic Resources · Steel"
+        },
+        {
+          "symbol": "VCS",
+          "company_name": "CTCP Vicostone",
+          "market_cap": 7104000000000.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "NKG",
+          "company_name": "CTCP Thép Nam Kim",
+          "market_cap": 6691184670950.0,
+          "sector_industry": "Basic Resources · Steel"
+        },
+        {
+          "symbol": "HT1",
+          "company_name": "CTCP Xi Măng Vicem Hà Tiên",
+          "market_cap": 5838325638300.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "VGS",
+          "company_name": "CTCP Ống thép Việt - Đức VG PIPE",
+          "market_cap": 1618085276500.0,
+          "sector_industry": "Basic Resources · Steel"
+        },
+        {
+          "symbol": "THG",
+          "company_name": "CTCP Đầu tư và Xây dựng Tiền Giang",
+          "market_cap": 1396176328950.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "LBM",
+          "company_name": "CTCP Khoáng sản và Vật liệu Xây dựng Lâm Đồng",
+          "market_cap": 1380000000000.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "ACC",
+          "company_name": "CTCP Đầu tư và Xây dựng Bình Dương ACC",
+          "market_cap": 1338749910750.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "CVT",
+          "company_name": "CTCP CMC",
+          "market_cap": 1010833936850.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "BCC",
+          "company_name": "CTCP Xi măng Bỉm Sơn",
+          "market_cap": 936394571200.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "DTL",
+          "company_name": "CTCP Đại Thiên Lộc",
+          "market_cap": 727571808000.0,
+          "sector_industry": "Basic Resources · Steel"
+        },
+        {
+          "symbol": "TEG",
+          "company_name": "CTCP Trường Thành Energy Group",
+          "market_cap": 730879700100.0,
+          "sector_industry": "Real Estate · Real Estate Holding & Development"
+        },
+        {
+          "symbol": "BTS",
+          "company_name": "CTCP Xi măng VICEM Bút Sơn",
+          "market_cap": 654867247400.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "TKU",
+          "company_name": "CTCP Công nghiệp Tung Kuang",
+          "market_cap": 646963292400.0,
+          "sector_industry": "Basic Resources · Aluminum"
+        },
+        {
+          "symbol": "CRC",
+          "company_name": "CTCP Create Capital Việt Nam",
+          "market_cap": 603971328920.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "HOM",
+          "company_name": "CTCP Xi măng VICEM Hoàng Mai",
+          "market_cap": 323989789500.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "CLH",
+          "company_name": "CTCP Xi măng La Hiên VVMI",
+          "market_cap": 260400000000.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "PDB",
+          "company_name": "CTCP Tập đoàn Đầu tư Din Capital",
+          "market_cap": 221858526900.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "YBM",
+          "company_name": "CTCP Khoáng sản Công nghiệp Yên Bái",
+          "market_cap": 184108843500.0,
+          "sector_industry": "Basic Resources · General Mining"
+        },
+        {
+          "symbol": "HCC",
+          "company_name": "CTCP Bê tông Hòa Cầm - Intimex",
+          "market_cap": 179260042500.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "FCM",
+          "company_name": "CTCP Bê tông Phan Vũ Hà Nam",
+          "market_cap": 170576249940.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "GMX",
+          "company_name": "CTCP Gạch ngói Gốm Xây dựng Mỹ Xuân",
+          "market_cap": 151778776800.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "VCA",
+          "company_name": "CTCP Thép VICASA",
+          "market_cap": 124384167180.0,
+          "sector_industry": "Basic Resources · Steel"
+        },
+        {
+          "symbol": "NSH",
+          "company_name": "CTCP Tập Đoàn Nhôm Sông Hồng Shalumi",
+          "market_cap": 93120466500.0,
+          "sector_industry": "Basic Resources · Aluminum"
+        },
+        {
+          "symbol": "HVX",
+          "company_name": "CTCP Xi măng VICEM Hải Vân",
+          "market_cap": 87837570000.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "GKM",
+          "company_name": "CTCP GKM Holdings",
+          "market_cap": 47151355500.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "TCR",
+          "company_name": "CTCP Công nghiệp Gốm sứ Taicera",
+          "market_cap": 33712867500.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        },
+        {
+          "symbol": "TXM",
+          "company_name": "CTCP VICEM Thạch cao Xi măng",
+          "market_cap": 30800000000.0,
+          "sector_industry": "Construction & Materials · Building Materials & Fixtures"
+        }
+      ],
+      "pending_symbols": []
+    },
+    "23": {
+      "industry_code": 23,
+      "industry_name": "Vận tải - kho bãi",
+      "updated": "2026-02-11T10:29:48.460973+00:00",
+      "companies": [
+        {
+          "symbol": "VJC",
+          "company_name": "CTCP Hàng không Vietjet",
+          "market_cap": 98325803710800.0,
+          "sector_industry": "Vận tải - kho bãi"
+        },
+        {
+          "symbol": "HVN",
+          "company_name": "Tổng Công ty Hàng không Việt Nam - CTCP",
+          "market_cap": 83077002233700.0,
+          "sector_industry": "Travel & Leisure · Airlines"
+        },
+        {
+          "symbol": "GMD",
+          "company_name": "CTCP Gemadept",
+          "market_cap": 30409101271700.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "VTP",
+          "company_name": "Tổng Công ty cổ phần Bưu chính Viettel",
+          "market_cap": 12714149584800.0,
+          "sector_industry": "Industrial Goods & Services · Delivery Services"
+        },
+        {
+          "symbol": "PVT",
+          "company_name": "Tổng Công ty cổ phần Vận tải Dầu khí",
+          "market_cap": 9422121261750.0,
+          "sector_industry": "Vận tải - kho bãi"
+        },
+        {
+          "symbol": "HAH",
+          "company_name": "CTCP Vận tải và Xếp dỡ Hải An",
+          "market_cap": 9760178053600.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "VSC",
+          "company_name": "CTCP Container Việt Nam",
+          "market_cap": 8797703507000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "TMS",
+          "company_name": "CTCP Transimex",
+          "market_cap": 7018991085750.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "PDN",
+          "company_name": "CTCP Cảng Đồng Nai",
+          "market_cap": 6262267914000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "SCS",
+          "company_name": "CTCP Dịch vụ Hàng hóa Sài Gòn",
+          "market_cap": 5085942235200.0,
+          "sector_industry": "Travel & Leisure · Airlines"
+        },
+        {
+          "symbol": "CDN",
+          "company_name": "CTCP Cảng Đà Nẵng",
+          "market_cap": 3276900000000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "AST",
+          "company_name": "CTCP Dịch vụ Hàng không Taseco",
+          "market_cap": 3195000000000.0,
+          "sector_industry": "Retail · Specialty Retailers"
+        },
+        {
+          "symbol": "DVP",
+          "company_name": "CTCP Đầu tư và Phát triển Cảng Đình Vũ",
+          "market_cap": 2872000000000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "NCT",
+          "company_name": "CTCP Dịch vụ Hàng hóa Nội Bài",
+          "market_cap": 2485859300000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "VOS",
+          "company_name": "CTCP Vận tải Biển Việt Nam",
+          "market_cap": 1981000000000.0,
+          "sector_industry": "Industrial Goods & Services · Marine Transportation"
+        },
+        {
+          "symbol": "SGN",
+          "company_name": "CTCP Phục vụ Mặt đất Sài Gòn",
+          "market_cap": 1951096247100.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "PVP",
+          "company_name": "CTCP Vận tải Dầu khí Thái Bình Dương",
+          "market_cap": 1534796289600.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        },
+        {
+          "symbol": "ASG",
+          "company_name": "CTCP Tập đoàn ASG",
+          "market_cap": 1534260906100.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "QNP",
+          "company_name": "CTCP Cảng Quy Nhơn",
+          "market_cap": 1285036410000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "CLL",
+          "company_name": "CTCP Cảng Cát Lái",
+          "market_cap": 1096500000000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "TCL",
+          "company_name": "CTCP Đại lý Giao nhận Vận tải Xếp dỡ Tân Cảng",
+          "market_cap": 1048005651000.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        },
+        {
+          "symbol": "VTO",
+          "company_name": "CTCP Vận tải Xăng dầu Vitaco",
+          "market_cap": 942426658800.0,
+          "sector_industry": "Industrial Goods & Services · Marine Transportation"
+        },
+        {
+          "symbol": "DL1",
+          "company_name": "CTCP Tập đoàn Alpha Seven",
+          "market_cap": 903001935000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "ILB",
+          "company_name": "CTCP ICD Tân Cảng - Long Bình",
+          "market_cap": 865218493800.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "WCS",
+          "company_name": "CTCP Bến xe Miền Tây",
+          "market_cap": 833690829300.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "VIP",
+          "company_name": "CTCP Vận tải Xăng dầu VIPCO",
+          "market_cap": 831921933150.0,
+          "sector_industry": "Industrial Goods & Services · Marine Transportation"
+        },
+        {
+          "symbol": "PDV",
+          "company_name": "CTCP Vận Tải Và Tiếp Vận Phương Đông Việt",
+          "market_cap": 753491797000.0,
+          "sector_industry": "Industrial Goods & Services · Marine Transportation"
+        },
+        {
+          "symbol": "GSP",
+          "company_name": "CTCP Vận tải Sản Phẩm Khí Quốc tế",
+          "market_cap": 749439255000.0,
+          "sector_industry": "Industrial Goods & Services · Marine Transportation"
+        },
+        {
+          "symbol": "DXP",
+          "company_name": "CTCP Cảng Đoạn Xá",
+          "market_cap": 730903622600.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "SFI",
+          "company_name": "CTCP Đại lý Vận tải SAFI",
+          "market_cap": 717458367300.0,
+          "sector_industry": "Industrial Goods & Services · Marine Transportation"
+        },
+        {
+          "symbol": "SKG",
+          "company_name": "CTCP Tàu cao tốc Superdong - Kiên Giang",
+          "market_cap": 668301854850.0,
+          "sector_industry": "Travel & Leisure · Travel & Tourism"
+        },
+        {
+          "symbol": "VNS",
+          "company_name": "CTCP Ánh Dương Việt Nam",
+          "market_cap": 629733301760.0,
+          "sector_industry": "Travel & Leisure · Travel & Tourism"
+        },
+        {
+          "symbol": "MAC",
+          "company_name": "CTCP Tập đoàn Macstar",
+          "market_cap": 571428897000.0,
+          "sector_industry": "Industrial Goods & Services · Commercial Vehicles & Trucks"
+        },
+        {
+          "symbol": "VNF",
+          "company_name": "CTCP Vinafreight",
+          "market_cap": 446975358000.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        },
+        {
+          "symbol": "MHC",
+          "company_name": "CTCP MHC",
+          "market_cap": 429546021840.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        },
+        {
+          "symbol": "TCO",
+          "company_name": "CTCP TCO Holdings",
+          "market_cap": 311326982680.0,
+          "sector_industry": "Food & Beverage · Farming & Fishing"
+        },
+        {
+          "symbol": "VNL",
+          "company_name": "CTCP Logistics Vinalink",
+          "market_cap": 295536178300.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        },
+        {
+          "symbol": "VSA",
+          "company_name": "CTCP Đại lý Hàng hải Việt Nam",
+          "market_cap": 284749017200.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        },
+        {
+          "symbol": "TCT",
+          "company_name": "CTCP Cáp treo Núi Bà Tây Ninh",
+          "market_cap": 255120600000.0,
+          "sector_industry": "Travel & Leisure · Travel & Tourism"
+        },
+        {
+          "symbol": "PJT",
+          "company_name": "CTCP Vận tải Xăng dầu Đường Thủy Petrolimex",
+          "market_cap": 227677482750.0,
+          "sector_industry": "Industrial Goods & Services · Marine Transportation"
+        },
+        {
+          "symbol": "VGP",
+          "company_name": "CTCP Cảng Rau Quả",
+          "market_cap": 217560631600.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "CIA",
+          "company_name": "CTCP Dịch vụ Sân bay Quốc tế Cam Ranh",
+          "market_cap": 190344678600.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "GIC",
+          "company_name": "CTCP VSC Green Logistics",
+          "market_cap": 178164000000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "MAS",
+          "company_name": "CTCP Dịch vụ Hàng không Sân bay Đà Nẵng",
+          "market_cap": 145954758600.0,
+          "sector_industry": "Travel & Leisure · Travel & Tourism"
+        },
+        {
+          "symbol": "ARM",
+          "company_name": "CTCP Xuất nhập khẩu Hàng không",
+          "market_cap": 115739727600.0,
+          "sector_industry": "Industrial Goods & Services · Industrial Suppliers"
+        },
+        {
+          "symbol": "TJC",
+          "company_name": "CTCP Dịch vụ Vận tải và Thương mại",
+          "market_cap": 112660000000.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        },
+        {
+          "symbol": "CAG",
+          "company_name": "CTCP Cảng An Giang",
+          "market_cap": 93840000000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "PRC",
+          "company_name": "CTCP Logistics Portserco",
+          "market_cap": 75636315600.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        },
+        {
+          "symbol": "DS3",
+          "company_name": "CTCP DS3",
+          "market_cap": 61884434000.0,
+          "sector_industry": "Industrial Goods & Services · Transportation Services"
+        },
+        {
+          "symbol": "PTS",
+          "company_name": "CTCP Vận tải và Dịch vụ Petrolimex Hải Phòng",
+          "market_cap": 51782400000.0,
+          "sector_industry": "Industrial Goods & Services · Trucking"
+        }
+      ],
+      "pending_symbols": []
+    }
+  }
+}

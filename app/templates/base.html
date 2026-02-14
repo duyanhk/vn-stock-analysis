@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}Stock Analyzer{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="container">
+      <div class="stock-header">
+        <div class="stock-header-left">
+          <div class="stock-logo">📊</div>
+          <div class="stock-info">
+            <h1 class="stock-title" id="stock-title">
+              <span id="stock-symbol">—</span> – <span id="stock-name">Stock Analyzer</span>
+            </h1>
+            <div class="stock-meta" id="stock-meta">
+              <span id="stock-sector">Enter a symbol to begin</span>
+              <button type="button" id="peer-analysis-btn" class="peer-analysis-btn" aria-label="Open peer analysis">Peer analysis</button>
+            </div>
+          </div>
+        </div>
+        <div class="stock-header-right">
+          <div class="search-form-wrap">
+            <form id="analyze-form"
+                  class="search-form"
+                  data-run-url="{{ url_for('main.run_financials') }}"
+                  data-peer-valuations-url="{{ url_for('main.run_peer_valuations') }}"
+                  data-download-url-template="{{ url_for('main.download', symbol='__SYMBOL__') }}"
+                  data-sample-tickers-url="{{ url_for('main.sample_tickers') }}">
+              <input type="text" name="symbol" id="symbol-input" placeholder="Search symbol (e.g. GVT)" required />
+              <button type="submit">🔍</button>
+            </form>
+            <div id="sample-tickers-hint" class="sample-tickers-hint" style="display:none;"></div>
+          </div>
+          <div class="timeframe-selector">
+            <button class="timeframe-btn active" data-years="5">5Y</button>
+            <button class="timeframe-btn" data-years="10">10Y</button>
+          </div>
+        </div>
+      </div>
+      <div class="stock-summary" id="stock-summary" style="display:none;">
+        <div class="stock-summary-left">
+          <div class="summary-item summary-item-price">
+            <div class="summary-price-row">
+              <span class="summary-label">Price:</span>
+              <span class="summary-value" id="stock-price">—</span>
+            </div>
+            <div class="stock-52w-block">
+              <div class="stock-52w-line" id="stock-52w-line">
+                <span class="stock-52w-prefix">52W:</span>
+                <span class="stock-52w-low" id="stock-52w-low">—</span>
+                <div class="stock-52w-bar" id="stock-52w-bar" role="img" aria-label="52 week range">
+                  <div class="stock-52w-bar-track">
+                    <div class="stock-52w-bar-fill" id="stock-52w-bar-fill"></div>
+                    <div class="stock-52w-bar-ticker" id="stock-52w-bar-ticker"></div>
+                  </div>
+                </div>
+                <span class="stock-52w-high" id="stock-52w-high">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Mkt Cap:</span>
+            <span class="summary-value" id="stock-mktcap">—</span>
+          </div>
+          <div class="summary-item summary-item-price">
+            <div class="summary-price-row">
+              <span class="summary-label">P/E:</span>
+              <span class="summary-value" id="stock-pe-value">—</span>
+            </div>
+            <div class="stock-52w-block">
+              <div class="stock-52w-line" id="stock-pe-52w-line">
+                <span class="stock-52w-prefix">52W:</span>
+                <span class="stock-52w-low" id="stock-pe-52w-low">—</span>
+                <div class="stock-52w-bar" id="stock-pe-52w-bar" role="img" aria-label="P/E 52 week range">
+                  <div class="stock-52w-bar-track">
+                    <div class="stock-52w-bar-fill" id="stock-pe-52w-bar-fill"></div>
+                    <div class="stock-52w-bar-ticker" id="stock-pe-52w-bar-ticker"></div>
+                  </div>
+                </div>
+                <span class="stock-52w-high" id="stock-pe-52w-high">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-item summary-item-price">
+            <div class="summary-price-row">
+              <span class="summary-label">P/B:</span>
+              <span class="summary-value" id="stock-pb-value">—</span>
+            </div>
+            <div class="stock-52w-block">
+              <div class="stock-52w-line" id="stock-pb-52w-line">
+                <span class="stock-52w-prefix">52W:</span>
+                <span class="stock-52w-low" id="stock-pb-52w-low">—</span>
+                <div class="stock-52w-bar" id="stock-pb-52w-bar" role="img" aria-label="P/B 52 week range">
+                  <div class="stock-52w-bar-track">
+                    <div class="stock-52w-bar-fill" id="stock-pb-52w-bar-fill"></div>
+                    <div class="stock-52w-bar-ticker" id="stock-pb-52w-bar-ticker"></div>
+                  </div>
+                </div>
+                <span class="stock-52w-high" id="stock-pb-52w-high">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-item summary-item-price">
+            <div class="summary-price-row">
+              <span class="summary-label">EV/EBITDA:</span>
+              <span class="summary-value" id="stock-ev-value">—</span>
+            </div>
+            <div class="stock-52w-block">
+              <div class="stock-52w-line" id="stock-ev-52w-line">
+                <span class="stock-52w-prefix">52W:</span>
+                <span class="stock-52w-low" id="stock-ev-52w-low">—</span>
+                <div class="stock-52w-bar" id="stock-ev-52w-bar" role="img" aria-label="EV/EBITDA 52 week range">
+                  <div class="stock-52w-bar-track">
+                    <div class="stock-52w-bar-fill" id="stock-ev-52w-bar-fill"></div>
+                    <div class="stock-52w-bar-ticker" id="stock-ev-52w-bar-ticker"></div>
+                  </div>
+                </div>
+                <span class="stock-52w-high" id="stock-ev-52w-high">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="stock-summary-right">
+          <div id="status" class="status stock-summary-status"></div>
+          <div class="earnings-mode-wrap" id="earnings-mode-wrap" style="display:none;">
+            <span class="earnings-mode-label">Earnings:</span>
+            <button type="button" class="earnings-mode-btn active" data-mode="actual">Actual</button>
+            <button type="button" class="earnings-mode-btn" data-mode="normalized">Normalized</button>
+            <button type="button" class="earnings-mode-btn" data-mode="conservative">Conservative</button>
+          </div>
+        </div>
+      </div>
+      <div id="sample-callout" class="sample-callout" style="display:none;" role="alert"></div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="container">
+      <small>Data sourced from Vietstock. Use at your own risk.</small>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
