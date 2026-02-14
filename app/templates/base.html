@@ -28,11 +28,13 @@
             <form id="analyze-form"
                   class="search-form"
                   data-run-url="{{ url_for('main.run_financials') }}"
+                  data-run-peers-url="{{ url_for('main.run_peers') }}"
                   data-peer-valuations-url="{{ url_for('main.run_peer_valuations') }}"
                   data-download-url-template="{{ url_for('main.download', symbol='__SYMBOL__') }}"
                   data-sample-tickers-url="{{ url_for('main.sample_tickers') }}">
               <input type="text" name="symbol" id="symbol-input" placeholder="Search symbol (e.g. GVT)" required />
-              <button type="submit">🔍</button>
+              <button type="button" id="analyze-btn" class="analyze-btn">Analyze</button>
+              <button type="submit" aria-label="Search">🔍</button>
             </form>
             <div id="sample-tickers-hint" class="sample-tickers-hint" style="display:none;"></div>
           </div>
@@ -41,6 +43,9 @@
             <button class="timeframe-btn" data-years="10">10Y</button>
           </div>
         </div>
+      </div>
+      <div id="fetch-status-bar" class="fetch-status-bar" role="status" aria-live="polite" style="display:none;">
+        <span id="fetch-status-text" class="fetch-status-text"></span>
       </div>
       <div class="stock-summary" id="stock-summary" style="display:none;">
         <div class="stock-summary-left">
@@ -136,6 +141,30 @@
         </div>
       </div>
       <div id="sample-callout" class="sample-callout" style="display:none;" role="alert"></div>
+
+      <!-- Fetch options modal (Financial only vs With peer list) -->
+      <div id="fetch-options-modal" class="fetch-options-modal" role="dialog" aria-labelledby="fetch-options-modal-title" aria-hidden="true">
+        <div class="fetch-options-modal-content">
+          <h3 id="fetch-options-modal-title" class="fetch-options-modal-title">Fetch options</h3>
+          <p class="fetch-options-modal-desc" id="fetch-options-modal-desc">How would you like to fetch data for <strong id="fetch-options-symbol">—</strong>?</p>
+          <div class="fetch-options-modal-btns">
+            <button type="button" class="fetch-options-modal-btn" id="fetch-options-financial-only">Financial only</button>
+            <button type="button" class="fetch-options-modal-btn fetch-options-modal-btn--primary" id="fetch-options-with-peers">With peer list</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Need peers modal (when opening peer analysis without peers) -->
+      <div id="need-peers-modal" class="need-peers-modal" role="dialog" aria-labelledby="need-peers-modal-title" aria-hidden="true">
+        <div class="need-peers-modal-content">
+          <h3 id="need-peers-modal-title" class="need-peers-modal-title">Need peer list</h3>
+          <p class="need-peers-modal-text">Peer analysis requires the peer list. Fetch it now?</p>
+          <div class="need-peers-modal-btns">
+            <button type="button" class="need-peers-modal-btn" id="need-peers-cancel">Cancel</button>
+            <button type="button" class="need-peers-modal-btn need-peers-modal-btn--primary" id="need-peers-fetch">Fetch peers</button>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 

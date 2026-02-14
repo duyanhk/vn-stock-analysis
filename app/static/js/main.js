@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const downloadLink = document.getElementById("downloadLink");
 
   const runUrl = form.getAttribute("data-run-url");
+  const runPeersUrl = form.getAttribute("data-run-peers-url") || "/run_peers";
   const downloadTemplate = form.getAttribute("data-download-url-template");
   const sampleTickersUrl = form.getAttribute("data-sample-tickers-url") || "/sample_tickers";
 
@@ -54,10 +55,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setLoading(isLoading) {
-    const button = form.querySelector("button[type='submit']");
-    if (!button) return;
-    button.disabled = isLoading;
-    button.textContent = isLoading ? "🔍" : "🔍";
+    const submitBtn = form.querySelector("button[type='submit']");
+    const analyzeBtn = document.getElementById("analyze-btn");
+    if (submitBtn) submitBtn.disabled = isLoading;
+    if (analyzeBtn) analyzeBtn.disabled = isLoading;
+  }
+
+  function setFetchStatus(status, message) {
+    const bar = document.getElementById("fetch-status-bar");
+    const text = document.getElementById("fetch-status-text");
+    if (!bar || !text) return;
+    bar.className = "fetch-status-bar";
+    if (status === "idle") {
+      bar.style.display = "none";
+      text.textContent = "";
+      return;
+    }
+    bar.style.display = "block";
+    text.textContent = message || status;
+    if (status === "fetching_financials" || status === "fetching_peers" || status === "fetching_peer_valuations") {
+      bar.classList.add("fetch-status-bar--active");
+    } else if (status === "complete") {
+      bar.classList.add("fetch-status-bar--complete");
+    } else if (status === "error") {
+      bar.classList.add("fetch-status-bar--error");
+    }
   }
 
   function showEmptyState() {
@@ -2720,7 +2742,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function showNeedPeersModal() {
+    const modal = document.getElementById("need-peers-modal");
+    if (modal) {
+      modal.classList.add("need-peers-modal--open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+  }
+
+  function closeNeedPeersModal() {
+    const modal = document.getElementById("need-peers-modal");
+    if (modal) {
+      modal.classList.remove("need-peers-modal--open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+  }
+
   function openPeerAnalysisModal() {
+    if (currentSymbol && (!currentPeers || currentPeers.length === 0)) {
+      showNeedPeersModal();
+      return;
+    }
     const modal = document.getElementById("peer-analysis-modal");
     if (!modal) return;
     modal.querySelectorAll(".peer-analysis-mode-btn").forEach((b) => {
@@ -3092,6 +3134,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         const btns = document.querySelectorAll(".peer-analysis-valuation-btn");
         btns.forEach((b) => { b.disabled = true; });
+        setFetchStatus("fetching_peer_valuations", "Fetching peer valuations…");
         if (placeholder) {
           placeholder.textContent = "Fetching 52w price and financial data…";
           placeholder.style.display = "block";
@@ -3118,7 +3161,9 @@ document.addEventListener("DOMContentLoaded", () => {
           const list = json.peer_valuations || [];
           const errs = json.errors || {};
           if (list.length === 0 && Object.keys(errs).length > 0) {
-            if (placeholder) placeholder.textContent = "Failed: " + Object.values(errs).join("; ");
+            const errMsg = "Failed: " + Object.values(errs).join("; ");
+            if (placeholder) placeholder.textContent = errMsg;
+            setFetchStatus("error", errMsg);
             return;
           }
           // Map valuations back into existing peer rows. Store full data for analysis; use same valuation logic as target.
@@ -3191,8 +3236,10 @@ document.addEventListener("DOMContentLoaded", () => {
             placeholder.textContent = list.length ? "" : "No valuation data returned.";
             placeholder.style.display = list.length ? "none" : "block";
           }
+          setFetchStatus("complete", list.length ? "Peer valuations complete" : "No valuation data");
         } catch (e) {
           if (placeholder) placeholder.textContent = "Error: " + (e.message || String(e));
+          setFetchStatus("error", "Peer valuations failed: " + (e.message || String(e)));
         } finally {
           btns.forEach((b) => { b.disabled = false; });
         }
@@ -3268,18 +3315,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Form submission
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const symbolInput = document.getElementById("symbol-input");
-    const symbol = symbolInput?.value?.trim();
-    if (!symbol) return;
+  // Fetch options modal: show when user starts a fetch (Enter or Analyze)
+  function showFetchOptionsModal(symbol) {
+    const modal = document.getElementById("fetch-options-modal");
+    const symbolEl = document.getElementById("fetch-options-symbol");
+    if (modal && symbolEl) {
+      symbolEl.textContent = symbol;
+      modal.classList.add("fetch-options-modal--open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+  }
 
+  function closeFetchOptionsModal() {
+    const modal = document.getElementById("fetch-options-modal");
+    if (modal) {
+      modal.classList.remove("fetch-options-modal--open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  async function performFetch(symbol, includePeers) {
+    closeFetchOptionsModal();
     setLoading(true);
     setStatus("Analyzing...", "loading");
+    setFetchStatus("fetching_financials", includePeers ? "Fetching financials and peer list…" : "Fetching financials…");
     document.getElementById("stock-summary").style.display = "flex";
-
-    // Hide sample callout
     const sampleCallout = document.getElementById("sample-callout");
     if (sampleCallout) sampleCallout.style.display = "none";
 
@@ -3287,13 +3347,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch(runUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ symbol }),
+        body: JSON.stringify({ symbol, include_peers: includePeers }),
       });
 
       const json = await res.json();
 
       if (!res.ok) {
         setStatus(json.error || "Failed to fetch data", "error");
+        setFetchStatus("error", json.error || "Failed");
         setLoading(false);
         return;
       }
@@ -3316,6 +3377,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (records.length === 0) {
         setStatus("No data returned", "error");
+        setFetchStatus("error", "No data returned");
         setLoading(false);
         return;
       }
@@ -3331,19 +3393,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
       populateDashboard(currentRecords, actualSymbol, marketData, sharesOutstanding, companyName, sectorIndustry, peers, peersNote);
 
-      // Update download link
       if (downloadLink) {
         downloadLink.href = downloadTemplate.replace("__SYMBOL__", actualSymbol);
         downloadLink.style.display = "inline-block";
       }
 
       setStatus(`Analysis complete for ${actualSymbol}`, "success");
+      setFetchStatus("complete", `Analysis complete for ${actualSymbol}`);
       const earningsWrap = document.getElementById("earnings-mode-wrap");
       if (earningsWrap) earningsWrap.style.display = "flex";
       setLoading(false);
     } catch (err) {
       setStatus("Network error: " + err.message, "error");
+      setFetchStatus("error", "Network error: " + err.message);
       setLoading(false);
+    }
+  }
+
+  // Form submission: show fetch options (Enter or submit button)
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const symbolInput = document.getElementById("symbol-input");
+    const symbol = symbolInput?.value?.trim();
+    if (!symbol) return;
+    showFetchOptionsModal(symbol);
+  });
+
+  // Analyze button: same as form submit
+  document.getElementById("analyze-btn")?.addEventListener("click", () => {
+    const symbolInput = document.getElementById("symbol-input");
+    const symbol = symbolInput?.value?.trim();
+    if (!symbol) return;
+    showFetchOptionsModal(symbol);
+  });
+
+  // Fetch options modal buttons
+  document.getElementById("fetch-options-financial-only")?.addEventListener("click", () => {
+    const symbolInput = document.getElementById("symbol-input");
+    const symbol = symbolInput?.value?.trim();
+    if (symbol) performFetch(symbol, false);
+  });
+  document.getElementById("fetch-options-with-peers")?.addEventListener("click", () => {
+    const symbolInput = document.getElementById("symbol-input");
+    const symbol = symbolInput?.value?.trim();
+    if (symbol) performFetch(symbol, true);
+  });
+
+  // Need peers modal: fetch peers on demand, then open peer analysis
+  async function performFetchPeers() {
+    if (!currentSymbol) return;
+    closeNeedPeersModal();
+    setFetchStatus("fetching_peers", "Fetching peer list…");
+    try {
+      const res = await fetch(runPeersUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symbol: currentSymbol }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setFetchStatus("error", json.error || "Failed to fetch peers");
+        setStatus(json.error || "Failed to fetch peers", "error");
+        return;
+      }
+      currentPeers = json.peers || [];
+      currentPeersNote = json.peers_note || null;
+      if (json.company_name != null) currentCompanyName = json.company_name;
+      if (json.sector_industry != null) currentSectorIndustry = json.sector_industry;
+      if (json.market && json.market.length) currentMarketData = json.market;
+      if (json.shares_outstanding != null) currentSharesOutstanding = json.shares_outstanding;
+      setFetchStatus("complete", "Peer list fetched");
+      openPeerAnalysisModal();
+    } catch (err) {
+      setFetchStatus("error", "Network error: " + err.message);
+      setStatus("Network error: " + err.message, "error");
+    }
+  }
+
+  document.getElementById("need-peers-cancel")?.addEventListener("click", closeNeedPeersModal);
+  document.getElementById("need-peers-fetch")?.addEventListener("click", performFetchPeers);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (document.getElementById("fetch-options-modal")?.classList.contains("fetch-options-modal--open")) {
+      closeFetchOptionsModal();
+    } else if (document.getElementById("need-peers-modal")?.classList.contains("need-peers-modal--open")) {
+      closeNeedPeersModal();
     }
   });
 

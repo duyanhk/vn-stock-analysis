@@ -234,6 +234,34 @@
     </div>
   </div>
 
+  <!-- Fetch Options Dialog (shown before running financials) -->
+  <div id="fetch-options-modal" class="fetch-options-modal" role="dialog" aria-labelledby="fetch-options-title" aria-hidden="true">
+    <div class="fetch-options-modal-backdrop"></div>
+    <div class="fetch-options-modal-content">
+      <h3 id="fetch-options-title" class="fetch-options-modal-title">Fetch options</h3>
+      <p class="fetch-options-modal-desc">How would you like to fetch data for <strong id="fetch-options-symbol">—</strong>?</p>
+      <div class="fetch-options-modal-actions">
+        <button type="button" class="fetch-options-btn" id="fetch-options-financial-only">Financial only</button>
+        <button type="button" class="fetch-options-btn" id="fetch-options-with-peers">With peer list</button>
+      </div>
+      <button type="button" class="fetch-options-modal-close" aria-label="Close">&times;</button>
+    </div>
+  </div>
+
+  <!-- Need Peers Modal (shown when Peer analysis clicked without peers) -->
+  <div id="need-peers-modal" class="need-peers-modal" role="dialog" aria-labelledby="need-peers-title" aria-hidden="true">
+    <div class="need-peers-modal-backdrop"></div>
+    <div class="need-peers-modal-content">
+      <h3 id="need-peers-title" class="need-peers-modal-title">Need to fetch peer list first</h3>
+      <p class="need-peers-modal-desc">Peer list was not fetched for this symbol. Fetch it now to use Peer analysis.</p>
+      <div class="need-peers-modal-actions">
+        <button type="button" class="need-peers-fetch-btn" id="need-peers-fetch-btn">Fetch peers</button>
+        <button type="button" class="need-peers-cancel-btn" id="need-peers-cancel-btn">Cancel</button>
+      </div>
+      <button type="button" class="need-peers-modal-close" aria-label="Close">&times;</button>
+    </div>
+  </div>
+
   <!-- Valuation -->
   <section class="section-valuation" id="section-valuation" style="display:none;">
     <h2 class="section-title">VALUATION</h2>

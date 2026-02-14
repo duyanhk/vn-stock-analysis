@@ -76,13 +76,21 @@ def sample_tickers():
     return jsonify({"available_samples": tickers})
 
 
-@bp.route("/run_financials", methods=["POST"])
-def run_financials():
-    # Support both JSON and form data
+def _parse_run_financials_request():
+    """Parse symbol and include_peers from request."""
     if request.is_json:
-        symbol = (request.json or {}).get("symbol", "").strip()
+        body = request.json or {}
+        symbol = body.get("symbol", "").strip()
+        include_peers = body.get("include_peers", True)
     else:
         symbol = request.form.get("symbol", "").strip()
+        include_peers = request.form.get("include_peers", "true").lower() in ("true", "1", "yes")
+    return symbol, include_peers
+
+
+@bp.route("/run_financials", methods=["POST"])
+def run_financials():
+    symbol, include_peers = _parse_run_financials_request()
     if not symbol:
         return jsonify({"records": [], "error": "Symbol is required."}), 400
     try:
@@ -114,22 +122,24 @@ def run_financials():
                 our_market_cap_vnd = float(latest_close) * 1000.0 * float(shares_outstanding)
             except (TypeError, ValueError):
                 our_market_cap_vnd = None
-        print("[run_financials] Step 4: get_industry_peers")
-        try:
-            peers, peer_extra = get_industry_peers(
-                market_symbol,
-                our_market_cap_vnd,
-                shares_outstanding,
-                company_name,
-                sector_industry,
-            )
-        except Exception as peer_err:
-            print(f"Warning: get_industry_peers failed for {market_symbol}: {peer_err}")
-            peers, peer_extra = [], {}
 
-        print("[run_financials] Step 5: get_company_meta_from_samples (merge peers if needed)")
-        if saved_peers and not peers:
-            peers = saved_peers
+        peers = []
+        peer_extra = {}
+        if include_peers:
+            print("[run_financials] Step 4: get_industry_peers")
+            try:
+                peers, peer_extra = get_industry_peers(
+                    market_symbol,
+                    our_market_cap_vnd,
+                    shares_outstanding,
+                    company_name,
+                    sector_industry,
+                )
+            except Exception as peer_err:
+                print(f"Warning: get_industry_peers failed for {market_symbol}: {peer_err}")
+            print("[run_financials] Step 5: get_company_meta_from_samples (merge peers if needed)")
+            if saved_peers and not peers:
+                peers = saved_peers
 
         if not current_app.config.get("USE_SAMPLE_DATA", False) and (company_name or sector_industry or peers):
             print("[run_financials] Step 6: update_sample_company_meta")
@@ -165,6 +175,68 @@ def run_financials():
         print("Traceback:\n" + traceback.format_exc())
         # Include error detail for debugging (Render/deployment)
         return jsonify({"records": [], "error": f"Server error: {err_msg}"}), 500
+
+
+@bp.route("/run_peers", methods=["POST"])
+def run_peers():
+    """Fetch peer list only (market data + company info + industry peers)."""
+    if request.is_json:
+        symbol = (request.json or {}).get("symbol", "").strip()
+    else:
+        symbol = request.form.get("symbol", "").strip()
+    if not symbol:
+        return jsonify({"peers": [], "error": "Symbol is required."}), 400
+    try:
+        market_symbol = symbol
+        print("[run_peers] Step 1: get_daily_summary")
+        market_data, market_error, shares_outstanding = get_daily_summary(market_symbol)
+        print("[run_peers] Step 2: get_company_info")
+        company_name, sector_industry, _ = get_company_info(market_symbol)
+        saved_name, saved_sector, saved_peers = get_company_meta_from_samples(market_symbol)
+        if saved_name and not company_name:
+            company_name = saved_name
+        if saved_sector and not sector_industry:
+            sector_industry = saved_sector
+        latest_close = None
+        if market_data:
+            last = market_data[-1]
+            latest_close = last.get("close")
+        our_market_cap_vnd = None
+        if latest_close is not None and shares_outstanding is not None:
+            try:
+                our_market_cap_vnd = float(latest_close) * 1000.0 * float(shares_outstanding)
+            except (TypeError, ValueError):
+                our_market_cap_vnd = None
+        print("[run_peers] Step 3: get_industry_peers")
+        peers, peer_extra = get_industry_peers(
+            market_symbol,
+            our_market_cap_vnd,
+            shares_outstanding,
+            company_name,
+            sector_industry,
+        )
+        if saved_peers and not peers:
+            peers = saved_peers
+        if not current_app.config.get("USE_SAMPLE_DATA", False) and (company_name or sector_industry or peers):
+            update_sample_company_meta(market_symbol, company_name, sector_industry, peers)
+        payload = {
+            "peers": peers,
+            "actual_symbol": market_symbol,
+            "company_name": company_name or None,
+            "sector_industry": sector_industry or None,
+            "market": market_data if not market_error else [],
+            "shares_outstanding": shares_outstanding,
+        }
+        if peer_extra.get("peers_pending_symbols") is not None:
+            payload["peers_pending_symbols"] = peer_extra["peers_pending_symbols"]
+        if peer_extra.get("peers_note"):
+            payload["peers_note"] = peer_extra["peers_note"]
+        return jsonify(_make_json_serializable(payload))
+    except Exception as exc:
+        err_msg = str(exc)[:500]
+        print("Error in /run_peers:", exc)
+        print("Traceback:\n" + traceback.format_exc())
+        return jsonify({"peers": [], "error": f"Server error: {err_msg}"}), 500
 
 
 @bp.route("/download/<symbol>", methods=["GET"])
