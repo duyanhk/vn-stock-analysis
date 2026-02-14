@@ -10,6 +10,12 @@ Environment variables for deployment:
   ENABLE_SELENIUM=false     Disable Vietstock Selenium fallback (default for cloud)
   USE_VNSTOCK_PRIMARY=true  Use VNStock as primary data source
 """
+# Must run before any imports that pull in matplotlib (vnstock/vnstock_ezchart)
+# Prevents "Matplotlib is building the font cache" blocking first request on Render
+import os
+os.environ.setdefault("MPLBACKEND", "Agg")
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib")
+
 from app import create_app
 
 app = create_app()

@@ -129,6 +129,15 @@ deactivate
 
 For rate limits, VNStock migration, data comparison, and troubleshooting, see **`debug/DEBUG.md`** (single combined guide). Debug and comparison scripts (e.g. `quick_compare.py`, `compare_data_sources.py`) live in the project root; run them from there.
 
+## Deployment (Render)
+
+**Required env vars on Render:**
+- `FLASK_ENV=production`
+- `USE_SAMPLE_DATA=true` (for demo; use `false` for live VNStock API)
+- `ENABLE_SELENIUM=false`
+
+**If you see "Network error" or 500:** Check Render Logs for the actual error. Ensure `USE_SAMPLE_DATA=true` for demo mode (no live API calls). On free tier, the service may sleep—first request after idle can take 30–60 seconds.
+
 ## Deployment (real API)
 
 For cloud hosting (Render, Railway, etc.) where Chrome/Selenium is unavailable:
@@ -141,6 +150,8 @@ For cloud hosting (Render, Railway, etc.) where Chrome/Selenium is unavailable:
 | `USE_VNSTOCK_PRIMARY` | `true` | Use VNStock as primary data source |
 
 **Cloud (no Chrome):** `ENABLE_SELENIUM=false` (default). VNStock only.
+
+**Render (real API):** Set `USE_SAMPLE_DATA=false`. Build Command: `./build.sh` (or `pip install -r requirements.txt` + matplotlib font cache pre-build) to avoid 30s block on first request.
 
 **Local / VPS (with Chrome):** `ENABLE_SELENIUM=true` to enable Vietstock fallback.
 

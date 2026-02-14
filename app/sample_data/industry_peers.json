@@ -1,5 +1,5 @@
 {
-  "updated": "2026-02-11T16:19:38.021203+00:00",
+  "updated": "2026-02-14T13:43:50.448987+00:00",
   "industries": {
     "18": {
       "industry_code": 18,
@@ -452,7 +452,7 @@
     "23": {
       "industry_code": 23,
       "industry_name": "Vận tải - kho bãi",
-      "updated": "2026-02-11T10:29:48.460973+00:00",
+      "updated": "2026-02-14T13:43:50.447974+00:00",
       "companies": [
         {
           "symbol": "VJC",
@@ -469,7 +469,7 @@
         {
           "symbol": "GMD",
           "company_name": "CTCP Gemadept",
-          "market_cap": 30409101271700.0,
+          "market_cap": 31987133175000.0,
           "sector_industry": "Industrial Goods & Services · Transportation Services"
         },
         {
@@ -487,25 +487,25 @@
         {
           "symbol": "HAH",
           "company_name": "CTCP Vận tải và Xếp dỡ Hải An",
-          "market_cap": 9760178053600.0,
+          "market_cap": 9878380902000.0,
           "sector_industry": "Industrial Goods & Services · Transportation Services"
         },
         {
           "symbol": "VSC",
           "company_name": "CTCP Container Việt Nam",
-          "market_cap": 8797703507000.0,
+          "market_cap": 9284384977600.0,
           "sector_industry": "Industrial Goods & Services · Transportation Services"
         },
         {
           "symbol": "TMS",
           "company_name": "CTCP Transimex",
-          "market_cap": 7018991085750.0,
+          "market_cap": 0.0,
           "sector_industry": "Industrial Goods & Services · Transportation Services"
         },
         {
           "symbol": "PDN",
           "company_name": "CTCP Cảng Đồng Nai",
-          "market_cap": 6262267914000.0,
+          "market_cap": 6345616644000.0,
           "sector_industry": "Industrial Goods & Services · Transportation Services"
         },
         {

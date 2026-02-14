@@ -199,7 +199,11 @@ def get_daily_summary(
         data, shares = _get_market_sample(symbol, "daily_summary")
         if data is not None:
             return data, None, shares
-        # If not found, return error
+        # Fallback: use first available market sample (for demo when symbol not in market_samples)
+        samples_data = _load_market_samples()
+        for s in samples_data.get("samples", []):
+            if s.get("data_type") == "daily_summary":
+                return s.get("data", []), None, s.get("shares_outstanding")
         return [], f"No sample data found for {symbol}", None
     
     # Live data mode - use VNStock

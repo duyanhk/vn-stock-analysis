@@ -28,6 +28,15 @@ def create_app() -> Flask:
 
     app.register_blueprint(main_bp)
 
+    # Ensure 500 errors return JSON (not HTML) so the frontend can parse them
+    @app.errorhandler(500)
+    def handle_500(err):
+        from flask import jsonify
+        import traceback
+        print("500 error:", err)
+        print(traceback.format_exc())
+        return jsonify({"records": [], "error": "Server error. Check Render logs for details."}), 500
+
     return app
 
 

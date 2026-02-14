@@ -60,6 +60,11 @@ def index():
     return render_template("index.html")
 
 
+@bp.route("/favicon.ico", methods=["GET"])
+def favicon():
+    return "", 204  # No content - avoids 404 in console
+
+
 @bp.route("/sample_tickers", methods=["GET"])
 def sample_tickers():
     """Return list of available sample tickers when USE_SAMPLE_DATA is True."""
@@ -151,9 +156,11 @@ def run_financials():
 
         return jsonify(_make_json_serializable(payload))
     except Exception as exc:  # pragma: no cover - generic safety net
+        err_msg = str(exc)[:500]  # truncate for safety
         print("Error in /run_financials:", exc)
         print("Traceback:\n" + traceback.format_exc())
-        return jsonify({"data": [], "error": "Unexpected server error."}), 500
+        # Include error detail for debugging (Render/deployment)
+        return jsonify({"records": [], "error": f"Server error: {err_msg}"}), 500
 
 
 @bp.route("/download/<symbol>", methods=["GET"])
