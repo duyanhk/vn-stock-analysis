@@ -115,13 +115,17 @@ def run_financials():
             except (TypeError, ValueError):
                 our_market_cap_vnd = None
         print("[run_financials] Step 4: get_industry_peers")
-        peers, peer_extra = get_industry_peers(
-            market_symbol,
-            our_market_cap_vnd,
-            shares_outstanding,
-            company_name,
-            sector_industry,
-        )
+        try:
+            peers, peer_extra = get_industry_peers(
+                market_symbol,
+                our_market_cap_vnd,
+                shares_outstanding,
+                company_name,
+                sector_industry,
+            )
+        except Exception as peer_err:
+            print(f"Warning: get_industry_peers failed for {market_symbol}: {peer_err}")
+            peers, peer_extra = [], {}
 
         print("[run_financials] Step 5: get_company_meta_from_samples (merge peers if needed)")
         if saved_peers and not peers:
