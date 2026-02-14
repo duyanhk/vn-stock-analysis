@@ -16,6 +16,12 @@ import os
 os.environ.setdefault("MPLBACKEND", "Agg")
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib")
 
+# Warm up matplotlib font cache at worker startup (not on first request)
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.font_manager
+matplotlib.font_manager._load_fontmanager()
+
 from app import create_app
 
 app = create_app()

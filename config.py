@@ -38,8 +38,7 @@ class Config:
 
 class ProductionConfig(Config):
     DEBUG = False
-    # Try KBS first on cloud (VCI can hit pandas KeyError on some symbols)
-    VNSTOCK_FINANCIAL_PROVIDERS = ["kbs", "vci"]
+    VNSTOCK_FINANCIAL_PROVIDERS = ["vci", "kbs"]
     # Disable quarterly on cloud: fewer API calls, faster, avoids VCI quarterly parsing bugs
     VNSTOCK_INCLUDE_QUARTERLY = _env_bool("VNSTOCK_INCLUDE_QUARTERLY", "false")
 
