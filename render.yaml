@@ -1,0 +1,15 @@
+# Render Blueprint - use this for infrastructure-as-code
+# If your service was created manually, update Start Command in Dashboard to match
+services:
+  - type: web
+    runtime: python
+    name: vn-stock-analysis
+    buildCommand: pip install -r requirements.txt && python -c "import os; os.environ.setdefault('MPLBACKEND','Agg'); import matplotlib; matplotlib.use('Agg'); import matplotlib.font_manager; matplotlib.font_manager._load_fontmanager(); print('Matplotlib OK')"
+    startCommand: gunicorn -w 1 -b 0.0.0.0:$PORT --timeout 180 --preload wsgi:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: USE_SAMPLE_DATA
+        value: "false"
+      - key: ENABLE_SELENIUM
+        value: "false"
