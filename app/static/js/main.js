@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentSharesOutstanding = null;
   let currentTimeframe = 5; // Default to 5 years
   let currentValuationTrendMode = "annual"; // "annual" (default) or "quarterly" (only when quarterly data exists)
+  let currentFinancialsViewMode = "quarterly"; // "quarterly" | "annually" — which periods to show in Financials tab
   let currentEarningsMode = "actual"; // "actual" | "normalized" | "conservative" — used for quality, growth, valuation (chart unchanged)
 
   // Fetch available sample tickers
@@ -1086,15 +1087,35 @@ document.addEventListener("DOMContentLoaded", () => {
     return val.toFixed(0);
   }
 
-  /** Format financial figures (Revenue, Net Income) — data is already in millions; unit is dynamic (B/M/K). */
+  /** Format financial figures (Revenue, Net Income) — data is already in millions; unit is dynamic (T/B/M/K).
+   * - >= 1000 B → xx.y T (1 decimal)
+   * - >= 100 B → no decimal, with thousand separators (e.g. 1,000 B)
+   * - < 100 in current unit → 1 decimal
+   */
   function formatFinancial(val) {
     if (val == null || isNaN(val)) return "—";
     const n = Number(val);
     const abs = Math.abs(n);
-    if (abs >= 1000) return (n / 1000).toFixed(2) + " B";
-    if (abs >= 1) return n.toFixed(2) + " M";
-    if (abs >= 0.001) return (n * 1000).toFixed(2) + " K";
-    return n.toFixed(2) + " M";
+    const sign = n < 0 ? "-" : "";
+    const fmt = (x, decimals) => {
+      if (decimals === 0) return Math.round(x).toLocaleString("en-US");
+      const s = x.toFixed(decimals);
+      const [int, dec] = s.split(".");
+      return parseInt(int, 10).toLocaleString("en-US") + (dec ? "." + dec : "");
+    };
+    if (abs >= 1e6) {
+      const tVal = n / 1e6;
+      return sign + (Math.abs(tVal) >= 100 ? fmt(tVal, 0) : tVal.toFixed(1)) + " T";
+    }
+    if (abs >= 1000) {
+      const bVal = n / 1000;
+      return sign + (Math.abs(bVal) >= 100 ? fmt(bVal, 0) : bVal.toFixed(1)) + " B";
+    }
+    if (abs >= 1) {
+      return sign + (abs >= 100 ? fmt(n, 0) : n.toFixed(1)) + " M";
+    }
+    if (abs >= 0.001) return sign + (n * 1000).toFixed(1) + " K";
+    return sign + n.toFixed(2) + " M";
   }
 
   function syncGrowthChartHeight() {
@@ -2297,15 +2318,16 @@ document.addEventListener("DOMContentLoaded", () => {
   ]);
 
   function populateFinancialsSection(records) {
-    const contentEl = document.getElementById("financials-content");
+    const stickyHeader = document.getElementById("financials-sticky-header");
     const placeholderEl = document.getElementById("financials-placeholder");
+    const tablesScroll = document.getElementById("financials-scroll-container");
     const balanceEl = document.getElementById("financials-balance-sheet");
     const incomeEl = document.getElementById("financials-income-statement");
     const cashflowEl = document.getElementById("financials-cashflow");
-    if (!contentEl || !placeholderEl || !balanceEl || !incomeEl || !cashflowEl) return;
+    if (!stickyHeader || !placeholderEl || !tablesScroll || !balanceEl || !incomeEl || !cashflowEl) return;
 
     if (!records || records.length === 0) {
-      contentEl.style.display = "none";
+      stickyHeader.style.display = "none";
       placeholderEl.style.display = "block";
       placeholderEl.textContent = "Financial statements coming soon...";
       return;
@@ -2318,20 +2340,46 @@ document.addEventListener("DOMContentLoaded", () => {
       return formatFinancial(val);
     };
 
-    const sortedRecords = [...records].filter((r) => r.Period != null).sort((a, b) => {
+    const isQuarterly = currentFinancialsViewMode === "quarterly";
+    const periodFilter = (p) => {
+      const s = String(p || "");
+      if (isQuarterly) return /-Q[1-4]$/i.test(s);
+      return s.endsWith("-FY");
+    };
+    let filteredRecords = records.filter((r) => r.Period != null && periodFilter(r.Period));
+    if (filteredRecords.length === 0) {
+      const altFilter = (p) => {
+        const s = String(p || "");
+        if (isQuarterly) return s.endsWith("-FY");
+        return /-Q[1-4]$/i.test(s);
+      };
+      filteredRecords = records.filter((r) => r.Period != null && altFilter(r.Period));
+    }
+    const sortedRecords = [...filteredRecords].sort((a, b) => {
       const pa = String(a.Period);
       const pb = String(b.Period);
       const yearA = parseInt(pa.match(/^(\d{4})/)?.[1] || "0", 10);
       const yearB = parseInt(pb.match(/^(\d{4})/)?.[1] || "0", 10);
-      if (yearA !== yearB) return yearB - yearA;
-      if (pa.includes("-Q4") && !pb.includes("-Q4")) return -1;
-      if (!pa.includes("-Q4") && pb.includes("-Q4")) return 1;
-      return pb.localeCompare(pa);
+      if (yearA !== yearB) return yearA - yearB;
+      if (isQuarterly) {
+        const qA = parseInt(pa.match(/-Q([1-4])$/i)?.[1] || "0", 10);
+        const qB = parseInt(pb.match(/-Q([1-4])$/i)?.[1] || "0", 10);
+        return qA - qB;
+      }
+      return pa.localeCompare(pb);
     });
 
-    const periods = [...new Set(sortedRecords.map((r) => r.Period))].slice(0, 12);
+    const periods = [...new Set(sortedRecords.map((r) => r.Period))].slice(0, 20);
     const byPeriod = {};
     sortedRecords.forEach((r) => { byPeriod[r.Period] = r; });
+
+    const periodHeaderEl = document.getElementById("financials-period-header");
+    if (periodHeaderEl) {
+      let ph = '<table class="financials-table"><thead><tr><th>Metric</th>';
+      periods.forEach((p) => { ph += `<th>${escapeHtml(p)}</th>`; });
+      ph += "</tr></thead></table>";
+      periodHeaderEl.innerHTML = ph;
+    }
 
     function renderStatement(container, title, metricKeys) {
       const available = metricKeys.filter((k) => sortedRecords.some((r) => r[k] != null && !isNaN(r[k])));
@@ -2340,10 +2388,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       let html = `<h4 class="financials-statement-title">${escapeHtml(title)}</h4>`;
-      html += '<div class="financials-table-wrap"><table class="financials-table">';
-      html += "<thead><tr><th>Metric</th>";
-      periods.forEach((p) => { html += `<th>${escapeHtml(p)}</th>`; });
-      html += "</tr></thead><tbody>";
+      html += '<table class="financials-table"><tbody>';
       available.forEach((key) => {
         html += `<tr><td class="financials-metric-name">${escapeHtml(key)}</td>`;
         periods.forEach((p) => {
@@ -2353,7 +2398,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         html += "</tr>";
       });
-      html += "</tbody></table></div>";
+      html += "</tbody></table>";
       container.innerHTML = html;
     }
 
@@ -2361,16 +2406,45 @@ document.addEventListener("DOMContentLoaded", () => {
     renderStatement(incomeEl, "Income Statement", FINANCIALS_INCOME_STATEMENT);
     renderStatement(cashflowEl, "Cash Flow Statement", FINANCIALS_CASHFLOW);
 
+    const periodScroll = document.getElementById("financials-period-scroll");
+    function scrollFinancialsToRight() {
+      const scrollEl = periodScroll || tablesScroll;
+      const maxScroll = scrollEl.scrollWidth - scrollEl.clientWidth;
+      if (maxScroll > 0) {
+        const pos = maxScroll;
+        if (periodScroll) periodScroll.scrollLeft = pos;
+        tablesScroll.scrollLeft = pos;
+      }
+    }
+
     const hasAny = balanceEl.innerHTML || incomeEl.innerHTML || cashflowEl.innerHTML;
-    contentEl.style.display = hasAny ? "block" : "none";
+    stickyHeader.style.display = hasAny ? "block" : "none";
+    tablesScroll.style.display = hasAny ? "block" : "none";
     placeholderEl.style.display = hasAny ? "none" : "block";
+    if (hasAny) {
+      scrollFinancialsToRight();
+      requestAnimationFrame(scrollFinancialsToRight);
+      setTimeout(scrollFinancialsToRight, 50);
+    }
+
+    document.querySelectorAll(".financials-view-btn").forEach((btn) => {
+      const isActive = btn.getAttribute("data-mode") === currentFinancialsViewMode;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
   }
 
   function populatePeersSection(peers, peersNote) {
     const container = document.getElementById("tab-peers");
     if (!container) return;
     if (!peers || peers.length === 0) {
-      container.innerHTML = "<p class=\"placeholder\">No peer data. Run analysis with live API to see industry peers.</p>";
+      const hasSymbol = !!(currentSymbol && currentSymbol.trim());
+      const btnHtml = hasSymbol
+        ? '<button type="button" class="fetch-peers-tab-btn" id="fetch-peers-tab-btn">Fetch peers</button>'
+        : "";
+      container.innerHTML = `<div class="peers-empty-wrap"><p class="placeholder">No peer data. Run analysis with live API to see industry peers.</p>${btnHtml}</div>`;
+      const btn = document.getElementById("fetch-peers-tab-btn");
+      if (btn) btn.addEventListener("click", performFetchPeers);
       return;
     }
     const escapeHtml = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -2813,8 +2887,33 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".tab-pane").forEach((p) => p.classList.remove("active"));
       btn.classList.add("active");
       document.getElementById(`tab-${tab}`).classList.add("active");
+      if (tab === "financials") {
+        requestAnimationFrame(() => {
+          const periodScroll = document.getElementById("financials-period-scroll");
+          const tablesScroll = document.getElementById("financials-scroll-container");
+          const scrollEl = periodScroll || tablesScroll;
+          if (scrollEl) {
+            const maxScroll = scrollEl.scrollWidth - scrollEl.clientWidth;
+            if (maxScroll > 0) {
+              if (periodScroll) periodScroll.scrollLeft = maxScroll;
+              if (tablesScroll) tablesScroll.scrollLeft = maxScroll;
+            }
+          }
+        });
+      }
     });
   });
+
+  // Sync horizontal scroll: period header (with scrollbar) drives body tables
+  (function initFinancialsScrollSync() {
+    const periodScroll = document.getElementById("financials-period-scroll");
+    const tablesScroll = document.getElementById("financials-scroll-container");
+    if (periodScroll && tablesScroll) {
+      periodScroll.addEventListener("scroll", () => {
+        tablesScroll.scrollLeft = periodScroll.scrollLeft;
+      });
+    }
+  })();
 
   // Growth chart toggles
   ["toggle-revenue", "toggle-net-income", "toggle-net-income-normalized", "toggle-net-income-conservative"].forEach((id) => {
@@ -3122,7 +3221,7 @@ document.addEventListener("DOMContentLoaded", () => {
         targetSymbol = (targetSymbol || currentSymbol || "").trim().toUpperCase();
         scope = (scope || "icb").toLowerCase();
         const uniqueSymbols = [...new Set(symbols.map((s) => (s || "").trim().toUpperCase()).filter(Boolean))];
-        const symbolsToFetch = uniqueSymbols.filter((s) => !peerValFetchedSymbols.has(s));
+        const symbolsToFetch = uniqueSymbols.filter((s) => !peerValFetchedSymbols.has(s) && s !== targetSymbol);
         if (!symbolsToFetch.length) {
           // Nothing new to fetch; just re-render using cached valuations
           if (placeholder) {
@@ -3297,6 +3396,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Financials view: Quarterly / Annually
+  document.querySelectorAll(".financials-view-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const mode = btn.getAttribute("data-mode");
+      if (mode !== "quarterly" && mode !== "annually") return;
+      currentFinancialsViewMode = mode;
+      document.querySelectorAll(".financials-view-btn").forEach((b) => {
+        b.classList.toggle("active", b.getAttribute("data-mode") === mode);
+        b.setAttribute("aria-pressed", b.getAttribute("data-mode") === mode ? "true" : "false");
+      });
+      if (currentRecords.length > 0) populateFinancialsSection(currentRecords);
+    });
+  });
+
   // Timeframe selector
   document.querySelectorAll(".timeframe-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -3410,33 +3523,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Auto-uppercase symbol input (tickers are case-sensitive)
+  document.getElementById("symbol-input")?.addEventListener("input", (e) => {
+    const el = e.target;
+    const start = el.selectionStart;
+    el.value = el.value.toUpperCase();
+    el.setSelectionRange(start, start);
+  });
+
   // Form submission: show fetch options (Enter or submit button)
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const symbolInput = document.getElementById("symbol-input");
-    const symbol = symbolInput?.value?.trim();
+    const symbol = (symbolInput?.value?.trim() || "").toUpperCase();
     if (!symbol) return;
+    if (symbolInput) symbolInput.value = symbol;
     showFetchOptionsModal(symbol);
   });
 
   // Analyze button: same as form submit
   document.getElementById("analyze-btn")?.addEventListener("click", () => {
     const symbolInput = document.getElementById("symbol-input");
-    const symbol = symbolInput?.value?.trim();
+    const symbol = (symbolInput?.value?.trim() || "").toUpperCase();
     if (!symbol) return;
+    if (symbolInput) symbolInput.value = symbol;
     showFetchOptionsModal(symbol);
   });
 
   // Fetch options modal buttons
   document.getElementById("fetch-options-financial-only")?.addEventListener("click", () => {
     const symbolInput = document.getElementById("symbol-input");
-    const symbol = symbolInput?.value?.trim();
-    if (symbol) performFetch(symbol, false);
+    const symbol = (symbolInput?.value?.trim() || "").toUpperCase();
+    if (symbol) {
+      if (symbolInput) symbolInput.value = symbol;
+      performFetch(symbol, false);
+    }
   });
   document.getElementById("fetch-options-with-peers")?.addEventListener("click", () => {
     const symbolInput = document.getElementById("symbol-input");
-    const symbol = symbolInput?.value?.trim();
-    if (symbol) performFetch(symbol, true);
+    const symbol = (symbolInput?.value?.trim() || "").toUpperCase();
+    if (symbol) {
+      if (symbolInput) symbolInput.value = symbol;
+      performFetch(symbol, true);
+    }
   });
 
   // Need peers modal: fetch peers on demand, then open peer analysis
@@ -3463,6 +3592,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (json.market && json.market.length) currentMarketData = json.market;
       if (json.shares_outstanding != null) currentSharesOutstanding = json.shares_outstanding;
       setFetchStatus("complete", "Peer list fetched");
+      populatePeersSection(currentPeers, currentPeersNote);
       openPeerAnalysisModal();
     } catch (err) {
       setFetchStatus("error", "Network error: " + err.message);
@@ -3474,8 +3604,19 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("need-peers-fetch")?.addEventListener("click", performFetchPeers);
 
   document.addEventListener("keydown", (e) => {
+    const fetchModal = document.getElementById("fetch-options-modal");
+    if (e.key === "Enter" && fetchModal?.classList.contains("fetch-options-modal--open")) {
+      e.preventDefault();
+      const symbolInput = document.getElementById("symbol-input");
+      const symbol = (symbolInput?.value?.trim() || "").toUpperCase();
+      if (symbol) {
+        if (symbolInput) symbolInput.value = symbol;
+        performFetch(symbol, false);
+      }
+      return;
+    }
     if (e.key !== "Escape") return;
-    if (document.getElementById("fetch-options-modal")?.classList.contains("fetch-options-modal--open")) {
+    if (fetchModal?.classList.contains("fetch-options-modal--open")) {
       closeFetchOptionsModal();
     } else if (document.getElementById("need-peers-modal")?.classList.contains("need-peers-modal--open")) {
       closeNeedPeersModal();

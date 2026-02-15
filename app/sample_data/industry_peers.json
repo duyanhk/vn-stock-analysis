@@ -1,5 +1,5 @@
 {
-  "updated": "2026-02-14T13:43:50.448987+00:00",
+  "updated": "2026-02-15T09:18:39.913483+00:00",
   "industries": {
     "18": {
       "industry_code": 18,
@@ -753,6 +753,115 @@
           "company_name": "CTCP Vận tải và Dịch vụ Petrolimex Hải Phòng",
           "market_cap": 51782400000.0,
           "sector_industry": "Industrial Goods & Services · Trucking"
+        }
+      ],
+      "pending_symbols": []
+    },
+    "6": {
+      "industry_code": 6,
+      "industry_name": "Công nghệ và thông tin",
+      "updated": "2026-02-15T09:18:39.911956+00:00",
+      "companies": [
+        {
+          "symbol": "FPT",
+          "company_name": "CTCP FPT",
+          "market_cap": 164047735752300.0,
+          "sector_industry": "Technology · Software"
+        },
+        {
+          "symbol": "CTR",
+          "company_name": "Tổng Công ty cổ phần Công trình Viettel",
+          "market_cap": 10626448159100.0
+        },
+        {
+          "symbol": "CMG",
+          "company_name": "CTCP Tập đoàn Công nghệ CMC",
+          "market_cap": 7221831228700.0
+        },
+        {
+          "symbol": "ELC",
+          "company_name": "CTCP Công Nghệ - Viễn Thông Elcom",
+          "market_cap": 2532044769000.0
+        },
+        {
+          "symbol": "SGT",
+          "company_name": "CTCP Công nghệ Viễn Thông Sài Gòn",
+          "market_cap": 2427257695200.0
+        },
+        {
+          "symbol": "ICT",
+          "company_name": "CTCP Viễn thông - Tin học Bưu điện",
+          "market_cap": 576111500000.0
+        },
+        {
+          "symbol": "ITD",
+          "company_name": "CTCP Công nghệ ITD",
+          "market_cap": 450101664250.0
+        },
+        {
+          "symbol": "DST",
+          "company_name": "CTCP Đầu tư Sao Thăng Long",
+          "market_cap": 347965200000.0
+        },
+        {
+          "symbol": "EID",
+          "company_name": "CTCP Đầu tư và Phát triển Giáo dục Hà Nội",
+          "market_cap": 339000000000.0
+        },
+        {
+          "symbol": "GLT",
+          "company_name": "CTCP Kỹ thuật Điện Toàn cầu",
+          "market_cap": 289129002000.0
+        },
+        {
+          "symbol": "ABR",
+          "company_name": "CTCP Đầu tư Nhãn hiệu Việt",
+          "market_cap": 248000000000.0
+        },
+        {
+          "symbol": "SED",
+          "company_name": "CTCP Đầu tư và Phát triển Giáo dục Phương Nam",
+          "market_cap": 173382660000.0
+        },
+        {
+          "symbol": "EBS",
+          "company_name": "CTCP Sách Giáo dục tại Thành phố Hà Nội",
+          "market_cap": 122715718000.0
+        },
+        {
+          "symbol": "STC",
+          "company_name": "CTCP Sách và Thiết bị Trường học Thành phố Hồ Chí Minh",
+          "market_cap": 95747457000.0
+        },
+        {
+          "symbol": "QST",
+          "company_name": "CTCP Sách và Thiết bị Trường học Quảng Ninh",
+          "market_cap": 90396000000.0
+        },
+        {
+          "symbol": "ADC",
+          "company_name": "CTCP Mỹ thuật và Truyền thông",
+          "market_cap": 76774164800.0
+        },
+        {
+          "symbol": "DAD",
+          "company_name": "CTCP Đầu tư và Phát triển Giáo dục Đà Nẵng",
+          "market_cap": 74547200000.0
+        },
+        {
+          "symbol": "ONE",
+          "company_name": "CTCP Công nghệ One",
+          "market_cap": 66306727200.0
+        },
+        {
+          "symbol": "VTC",
+          "company_name": "CTCP Viễn thông VTC",
+          "market_cap": 54349716000.0
+        },
+        {
+          "symbol": "SMN",
+          "company_name": "CTCP Sách và Thiết bị Giáo dục Miền Nam",
+          "market_cap": 47133500000.0
         }
       ],
       "pending_symbols": []

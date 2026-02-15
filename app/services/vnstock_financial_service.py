@@ -28,7 +28,8 @@ except ImportError:
 # Rate limit handling
 # VNStock Guest tier: 20 requests/minute = 1 request per 3 seconds
 # Each API call takes ~3s naturally, so 2s added delay = 5s total per call (12 calls/min)
-RATE_LIMIT_DELAY = 2  # seconds between API calls to avoid rate limits
+RATE_LIMIT_DELAY = 2  # seconds between API calls when fetching with peers (conservative)
+RATE_LIMIT_DELAY_FAST = 0.5  # seconds when financial-only (fewer total calls, less risk)
 
 
 def _sanitize_for_json(value):
@@ -79,7 +80,7 @@ def _finance_call_kwargs(provider: str, period: str) -> Dict[str, Any]:
     return kwargs
 
 
-def _fetch_balance_sheet(symbol: str, period: str = "annual", provider: str = "vci") -> Optional[pd.DataFrame]:
+def _fetch_balance_sheet(symbol: str, period: str = "annual", provider: str = "vci", rate_limit_delay: float = RATE_LIMIT_DELAY) -> Optional[pd.DataFrame]:
     """
     Fetch balance sheet data from VNStock.
     
@@ -91,7 +92,7 @@ def _fetch_balance_sheet(symbol: str, period: str = "annual", provider: str = "v
     kwargs = _finance_call_kwargs(provider, period)
     try:
         stock = Vnstock().stock(symbol=symbol, source=provider)
-        time.sleep(RATE_LIMIT_DELAY)  # Avoid rate limits
+        time.sleep(rate_limit_delay)
         df = stock.finance.balance_sheet(**kwargs)
         
         if df is None or df.empty:
@@ -112,7 +113,7 @@ def _fetch_balance_sheet(symbol: str, period: str = "annual", provider: str = "v
         return None
 
 
-def _fetch_income_statement(symbol: str, period: str = "annual", provider: str = "vci") -> Optional[pd.DataFrame]:
+def _fetch_income_statement(symbol: str, period: str = "annual", provider: str = "vci", rate_limit_delay: float = RATE_LIMIT_DELAY) -> Optional[pd.DataFrame]:
     """
     Fetch income statement data from VNStock.
     
@@ -124,7 +125,7 @@ def _fetch_income_statement(symbol: str, period: str = "annual", provider: str =
     kwargs = _finance_call_kwargs(provider, period)
     try:
         stock = Vnstock().stock(symbol=symbol, source=provider)
-        time.sleep(RATE_LIMIT_DELAY)  # Avoid rate limits
+        time.sleep(rate_limit_delay)
         df = stock.finance.income_statement(**kwargs)
         
         if df is None or df.empty:
@@ -145,7 +146,7 @@ def _fetch_income_statement(symbol: str, period: str = "annual", provider: str =
         return None
 
 
-def _fetch_cash_flow(symbol: str, period: str = "annual", provider: str = "vci") -> Optional[pd.DataFrame]:
+def _fetch_cash_flow(symbol: str, period: str = "annual", provider: str = "vci", rate_limit_delay: float = RATE_LIMIT_DELAY) -> Optional[pd.DataFrame]:
     """
     Fetch cash flow statement data from VNStock.
     
@@ -157,7 +158,7 @@ def _fetch_cash_flow(symbol: str, period: str = "annual", provider: str = "vci")
     kwargs = _finance_call_kwargs(provider, period)
     try:
         stock = Vnstock().stock(symbol=symbol, source=provider)
-        time.sleep(RATE_LIMIT_DELAY)  # Avoid rate limits
+        time.sleep(rate_limit_delay)
         df = stock.finance.cash_flow(**kwargs)
         
         if df is None or df.empty:
@@ -773,7 +774,8 @@ def _calculate_yoy_growth(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]
 def fetch_financial_data_vnstock(
     symbol: str,
     provider: str = "vci",
-    include_quarterly: bool = True
+    include_quarterly: bool = True,
+    rate_limit_delay: float = RATE_LIMIT_DELAY,
 ) -> Tuple[Optional[List[Dict]], Optional[str]]:
     """
     Fetch financial data from VNStock and return structured records.
@@ -782,6 +784,7 @@ def fetch_financial_data_vnstock(
         symbol: Stock ticker symbol
         provider: Data provider ('vci', 'kbs', etc.; VCI default, KBS fallback)
         include_quarterly: Whether to include quarterly data (default True)
+        rate_limit_delay: Seconds between API calls (use RATE_LIMIT_DELAY_FAST for financial-only)
     
     Returns:
         Tuple of (records, error_message)
@@ -798,9 +801,9 @@ def fetch_financial_data_vnstock(
     
     try:
         # Fetch annual data (3 API calls with delays)
-        balance_annual = _fetch_balance_sheet(symbol, period="annual", provider=provider)
-        income_annual = _fetch_income_statement(symbol, period="annual", provider=provider)
-        cash_annual = _fetch_cash_flow(symbol, period="annual", provider=provider)
+        balance_annual = _fetch_balance_sheet(symbol, period="annual", provider=provider, rate_limit_delay=rate_limit_delay)
+        income_annual = _fetch_income_statement(symbol, period="annual", provider=provider, rate_limit_delay=rate_limit_delay)
+        cash_annual = _fetch_cash_flow(symbol, period="annual", provider=provider, rate_limit_delay=rate_limit_delay)
         
         if balance_annual is None or income_annual is None:
             return None, f"Failed to fetch annual financial data for {symbol} from {provider}"
@@ -811,9 +814,9 @@ def fetch_financial_data_vnstock(
                 balance_annual, income_annual, cash_annual, quarters_only=False
             )
             if include_quarterly:
-                balance_quarter = _fetch_balance_sheet(symbol, period="quarter", provider=provider)
-                income_quarter = _fetch_income_statement(symbol, period="quarter", provider=provider)
-                cash_quarter = _fetch_cash_flow(symbol, period="quarter", provider=provider)
+                balance_quarter = _fetch_balance_sheet(symbol, period="quarter", provider=provider, rate_limit_delay=rate_limit_delay)
+                income_quarter = _fetch_income_statement(symbol, period="quarter", provider=provider, rate_limit_delay=rate_limit_delay)
+                cash_quarter = _fetch_cash_flow(symbol, period="quarter", provider=provider, rate_limit_delay=rate_limit_delay)
                 if balance_quarter is not None and income_quarter is not None and _is_kbs_long_format(balance_quarter, income_quarter):
                     q_year_cols = _get_kbs_year_columns(balance_quarter)
                     if q_year_cols:
@@ -825,9 +828,9 @@ def fetch_financial_data_vnstock(
         else:
             records = _build_financial_records(balance_annual, income_annual, cash_annual)
             if include_quarterly:
-                balance_quarter = _fetch_balance_sheet(symbol, period="quarter", provider=provider)
-                income_quarter = _fetch_income_statement(symbol, period="quarter", provider=provider)
-                cash_quarter = _fetch_cash_flow(symbol, period="quarter", provider=provider)
+                balance_quarter = _fetch_balance_sheet(symbol, period="quarter", provider=provider, rate_limit_delay=rate_limit_delay)
+                income_quarter = _fetch_income_statement(symbol, period="quarter", provider=provider, rate_limit_delay=rate_limit_delay)
+                cash_quarter = _fetch_cash_flow(symbol, period="quarter", provider=provider, rate_limit_delay=rate_limit_delay)
                 if balance_quarter is not None and income_quarter is not None:
                     quarterly_records = _build_financial_records(
                         balance_quarter, income_quarter, cash_quarter, quarters_only=True

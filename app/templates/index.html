@@ -328,10 +328,21 @@
         <a id="downloadLink" href="#" class="download-link" style="display:none;">Download CSV</a>
       </div>
       <div class="tab-pane" id="tab-financials">
-        <div id="financials-content" class="financials-content">
-          <div id="financials-balance-sheet" class="financials-statement-section"></div>
-          <div id="financials-income-statement" class="financials-statement-section"></div>
-          <div id="financials-cashflow" class="financials-statement-section"></div>
+        <div class="financials-sticky-header" id="financials-sticky-header" style="display:none;">
+          <div class="financials-toolbar">
+            <button type="button" class="financials-view-btn active" data-mode="quarterly" aria-pressed="true">Quarterly</button>
+            <button type="button" class="financials-view-btn" data-mode="annually" aria-pressed="false">Annually</button>
+          </div>
+          <div class="financials-period-scroll" id="financials-period-scroll">
+            <div id="financials-period-header" class="financials-period-header"></div>
+          </div>
+        </div>
+        <div class="financials-tables-scroll" id="financials-scroll-container" style="display:none;">
+          <div class="financials-tables-inner" id="financials-tables-inner">
+            <div id="financials-balance-sheet" class="financials-statement-section"></div>
+            <div id="financials-income-statement" class="financials-statement-section"></div>
+            <div id="financials-cashflow" class="financials-statement-section"></div>
+          </div>
         </div>
         <p id="financials-placeholder" class="placeholder">Financial statements coming soon...</p>
       </div>

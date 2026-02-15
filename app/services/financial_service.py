@@ -11,7 +11,11 @@ import numpy as np
 import pandas as pd
 from flask import current_app
 
-from app.services.vnstock_financial_service import fetch_financial_data_vnstock
+from app.services.vnstock_financial_service import (
+    fetch_financial_data_vnstock,
+    RATE_LIMIT_DELAY,
+    RATE_LIMIT_DELAY_FAST,
+)
 
 SAMPLES_JSON = "samples.json"
 MAX_SAMPLES = 3
@@ -195,7 +199,7 @@ def update_sample_company_meta(
             return
 
 
-def _fetch_with_vnstock(symbol: str, use_vnstock: bool, providers: List[str], include_quarterly: bool = False) -> Tuple[Optional[List[Dict]], Optional[str]]:
+def _fetch_with_vnstock(symbol: str, use_vnstock: bool, providers: List[str], include_quarterly: bool = False, rate_limit_delay: float = 2) -> Tuple[Optional[List[Dict]], Optional[str]]:
     """
     Try to fetch financial data from VNStock with multiple providers.
     
@@ -212,7 +216,8 @@ def _fetch_with_vnstock(symbol: str, use_vnstock: bool, providers: List[str], in
             records, error = fetch_financial_data_vnstock(
                 symbol,
                 provider=provider,
-                include_quarterly=include_quarterly
+                include_quarterly=include_quarterly,
+                rate_limit_delay=rate_limit_delay,
             )
             
             if records is not None and not error:
@@ -285,6 +290,7 @@ def _fetch_with_vietstock_scraper(
 def get_financial_ratios(
     symbol: str,
     skip_store: bool = False,
+    include_peers: bool = True,
 ) -> Tuple[List[Dict], Optional[str], Optional[str], Optional[List[str]]]:
     """
     Fetch financial data using VNStock (primary) with Vietstock scraping as fallback.
@@ -295,6 +301,7 @@ def get_financial_ratios(
       the latest sample file; actual_symbol is the ticker used, available_samples
       is the list of available ticker names.
     - skip_store: If True, do not write to samples.json (e.g. when storing in peer_valuation_samples).
+    - include_peers: If False, use faster rate-limit delay (financial-only fetch).
     """
     if not symbol:
         return [], "Symbol is required.", None, None
@@ -331,7 +338,8 @@ def get_financial_ratios(
         return [], "No sample data found. Run a scrape or add *_result.csv to output.", None, None
 
     # Try VNStock first (primary data source)
-    records, vnstock_error = _fetch_with_vnstock(symbol, use_vnstock, vnstock_providers, vnstock_include_quarterly)
+    rate_delay = RATE_LIMIT_DELAY_FAST if not include_peers else RATE_LIMIT_DELAY
+    records, vnstock_error = _fetch_with_vnstock(symbol, use_vnstock, vnstock_providers, vnstock_include_quarterly, rate_limit_delay=rate_delay)
     
     if records is not None:
         # Success with VNStock

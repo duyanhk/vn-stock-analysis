@@ -39,8 +39,7 @@ class Config:
 class ProductionConfig(Config):
     DEBUG = False
     VNSTOCK_FINANCIAL_PROVIDERS = ["vci", "kbs"]
-    # Disable quarterly on cloud: fewer API calls, faster, avoids VCI quarterly parsing bugs
-    VNSTOCK_INCLUDE_QUARTERLY = _env_bool("VNSTOCK_INCLUDE_QUARTERLY", "false")
+    VNSTOCK_INCLUDE_QUARTERLY = _env_bool("VNSTOCK_INCLUDE_QUARTERLY", "true")
 
 
 class DevelopmentConfig(Config):

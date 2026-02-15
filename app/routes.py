@@ -96,7 +96,7 @@ def run_financials():
     try:
         # Fetch financial data
         print("[run_financials] Step 1: get_financial_ratios")
-        data, error, actual_symbol, available_samples = get_financial_ratios(symbol)
+        data, error, actual_symbol, available_samples = get_financial_ratios(symbol, include_peers=include_peers)
         if error:
             return jsonify({"records": [], "error": error}), 400
 
